@@ -19,13 +19,6 @@ header{background:linear-gradient(135deg,#0a1628,#0f2040,#0a1628);border-bottom:
 .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,#fbbf24,#f97316);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
 .logo-text{font-size:16px;font-weight:800;}
 .logo-sub{font-size:10px;color:var(--muted);font-family:'JetBrains Mono';}
-.fems-pill{display:flex;align-items:center;gap:6px;padding:5px 10px;border-radius:20px;border:1px solid var(--border);font-size:11px;font-family:'JetBrains Mono';cursor:pointer;transition:all .2s;}
-.fems-pill.connected{border-color:rgba(52,211,153,.4);background:rgba(52,211,153,.08);color:var(--accent3);}
-.fems-pill.disconnected{border-color:rgba(248,113,113,.3);background:rgba(248,113,113,.06);color:var(--red);}
-.fems-pill.loading{border-color:rgba(245,158,11,.3);background:rgba(245,158,11,.06);color:var(--accent);}
-.fems-dot{width:7px;height:7px;border-radius:50%;background:currentColor;}
-.fems-dot.pulse{animation:pulse 1.5s infinite;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
 .year-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:8px 16px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;}
 .year-bar::-webkit-scrollbar{display:none;}
@@ -75,30 +68,45 @@ td.tot{color:var(--accent);font-weight:700;}
 td.pos{color:var(--accent3);}
 td.neg{color:var(--red);}
 
-td input[type=number]{background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.2);color:var(--accent);font-family:'JetBrains Mono';font-size:11px;width:70px;padding:3px 5px;border-radius:4px;text-align:right;outline:none;transition:border-color .2s;}
+td input[type=number]{background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.2);color:var(--accent);font-family:'JetBrains Mono';font-size:11px;width:70px;padding:3px 5px;border-radius:4px;text-align:right;outline:none;}
 td input[type=number]:focus{border-color:var(--accent);}
 td input[type=number]::-webkit-inner-spin-button{opacity:0;}
 
-.field{margin-bottom:14px;}
-.field label{display:block;font-size:11px;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-bottom:5px;font-family:'JetBrains Mono';}
-.field input,.field select{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:8px;font-family:'Syne';font-size:14px;outline:none;transition:border-color .2s;}
-.field input:focus,.field select:focus{border-color:var(--accent);}
+/* ── SCHNELLEINGABE ── */
+.quick-header{background:linear-gradient(135deg,rgba(34,211,238,.1),rgba(245,158,11,.08));border:1px solid rgba(34,211,238,.25);border-radius:12px;padding:16px;margin-bottom:16px;text-align:center;}
+.quick-header h2{font-size:18px;font-weight:800;margin-bottom:4px;}
+.quick-header p{font-size:12px;color:var(--muted);}
 
-.live-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px;}
-@media(min-width:600px){.live-grid{grid-template-columns:repeat(4,1fr);}}
-.lcard{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;}
-.lcard .lv{font-size:20px;font-weight:700;font-family:'JetBrains Mono';}
-.lcard .ll{font-size:10px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.8px;}
+.month-selector{display:flex;gap:8px;margin-bottom:16px;}
+.month-selector select{flex:1;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:8px;font-family:'Syne';font-size:14px;outline:none;}
+.month-selector select:focus{border-color:var(--accent);}
 
-.soc-bar{height:10px;background:var(--border);border-radius:5px;overflow:hidden;margin:8px 0 4px;}
-.soc-fill{height:100%;border-radius:5px;transition:width .8s ease;background:linear-gradient(90deg,var(--red),var(--accent),var(--accent3));}
+.fems-field{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.fems-field-left{display:flex;align-items:center;gap:10px;}
+.fems-field-icon{font-size:22px;width:36px;text-align:center;}
+.fems-field-label{font-size:14px;font-weight:700;}
+.fems-field-sub{font-size:11px;color:var(--muted);margin-top:1px;}
+.fems-field input{background:rgba(245,158,11,.08);border:2px solid rgba(245,158,11,.3);color:var(--accent);font-family:'JetBrains Mono';font-size:18px;font-weight:700;width:110px;padding:8px 10px;border-radius:8px;text-align:right;outline:none;transition:all .2s;}
+.fems-field input:focus{border-color:var(--accent);background:rgba(245,158,11,.15);}
+.fems-field input::-webkit-inner-spin-button{opacity:0;}
 
-.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:8px;font-family:'Syne';font-weight:700;font-size:13px;cursor:pointer;border:none;transition:all .2s;}
-.btn-primary{background:var(--accent);color:#000;}
-.btn-secondary{background:var(--surface);border:1px solid var(--border);color:var(--text);}
-.btn-secondary:hover{border-color:var(--accent);color:var(--accent);}
-.btn:active{transform:scale(.97);}
-.btn:disabled{opacity:.4;cursor:not-allowed;}
+.import-btn{width:100%;background:linear-gradient(135deg,var(--accent),#f97316);color:#000;font-family:'Syne';font-weight:800;font-size:16px;padding:16px;border-radius:12px;border:none;cursor:pointer;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 20px rgba(245,158,11,.3);}
+.import-btn:active{transform:scale(.98);}
+
+.result-box{background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.25);border-radius:10px;padding:14px;margin-top:12px;display:none;}
+.result-box.show{display:block;}
+.result-box h4{color:var(--accent3);font-size:14px;margin-bottom:8px;}
+.result-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid rgba(52,211,153,.1);}
+.result-row:last-child{border-bottom:none;}
+.result-row span:last-child{font-family:'JetBrains Mono';color:var(--accent3);font-weight:700;}
+
+.fems-link{display:flex;align-items:center;gap:8px;background:rgba(34,211,238,.06);border:1px solid rgba(34,211,238,.2);border-radius:8px;padding:10px 14px;text-decoration:none;color:var(--accent2);font-size:13px;font-weight:700;margin-bottom:12px;transition:background .2s;}
+.fems-link:hover{background:rgba(34,211,238,.1);}
+
+.abar{height:8px;background:var(--border);border-radius:4px;overflow:hidden;margin:10px 0;}
+.afill{height:100%;background:linear-gradient(90deg,var(--accent3),var(--accent));border-radius:4px;transition:width .6s ease;}
+
+.chart-wrap{position:relative;height:200px;margin-top:8px;}
 
 .fab{position:fixed;bottom:20px;right:16px;background:linear-gradient(135deg,var(--accent),#f97316);color:#000;font-family:'Syne';font-weight:700;font-size:13px;padding:12px 22px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 6px 24px rgba(245,158,11,.4);display:flex;align-items:center;gap:7px;z-index:200;transition:transform .2s;}
 .fab:active{transform:scale(.97);}
@@ -108,14 +116,13 @@ td input[type=number]::-webkit-inner-spin-button{opacity:0;}
 .toast.ok{background:var(--accent3);color:#000;}
 .toast.err{background:var(--red);color:#fff;}
 
-.abar{height:8px;background:var(--border);border-radius:4px;overflow:hidden;margin:10px 0;}
-.afill{height:100%;background:linear-gradient(90deg,var(--accent3),var(--accent));border-radius:4px;transition:width .6s ease;}
-
-.chart-wrap{position:relative;height:200px;margin-top:8px;}
-
-.import-banner{background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.25);border-radius:10px;padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
-.import-banner p{font-size:12px;color:var(--accent2);margin-bottom:2px;}
-.import-banner small{font-size:11px;color:var(--muted);}
+.field label{display:block;font-size:11px;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-bottom:5px;font-family:'JetBrains Mono';}
+.field input,.field select{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:8px;font-family:'Syne';font-size:14px;outline:none;transition:border-color .2s;margin-bottom:12px;}
+.field input:focus,.field select:focus{border-color:var(--accent);}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:8px;font-family:'Syne';font-weight:700;font-size:13px;cursor:pointer;border:none;transition:all .2s;}
+.btn-primary{background:var(--accent);color:#000;}
+.btn-secondary{background:var(--surface);border:1px solid var(--border);color:var(--text);}
+.btn:active{transform:scale(.97);}
 </style>
 </head>
 <body>
@@ -125,12 +132,8 @@ td input[type=number]::-webkit-inner-spin-button{opacity:0;}
     <div class="logo-icon">☀️</div>
     <div>
       <div class="logo-text">Solar Tracker</div>
-      <div class="logo-sub">Haus Fuchs · 11.4 kWp</div>
+      <div class="logo-sub">Tondo / Fuchs · 11.4 kWp</div>
     </div>
-  </div>
-  <div class="fems-pill disconnected" id="femsPill" onclick="showTab('fems',document.querySelector('[data-t=fems]'))">
-    <div class="fems-dot" id="femsDot"></div>
-    <span id="femsStatus">FEMS</span>
   </div>
 </header>
 
@@ -138,57 +141,120 @@ td input[type=number]::-webkit-inner-spin-button{opacity:0;}
 
 <main>
   <div class="tabs">
-    <button class="tab active" data-t="live" onclick="showTab('live',this)">⚡ Live</button>
-    <button class="tab" data-t="eingabe" onclick="showTab('eingabe',this)">📥 Eingabe</button>
+    <button class="tab active" data-t="schnell" onclick="showTab('schnell',this)">📥 Schnelleingabe</button>
+    <button class="tab" data-t="eingabe" onclick="showTab('eingabe',this)">📋 Details</button>
     <button class="tab" data-t="gesamt" onclick="showTab('gesamt',this)">📈 Gesamt</button>
     <button class="tab" data-t="invest" onclick="showTab('invest',this)">💰 Invest</button>
-    <button class="tab" data-t="fems" onclick="showTab('fems',this)">⚙️ FEMS</button>
+    <button class="tab" data-t="einst" onclick="showTab('einst',this)">⚙️ Einst.</button>
   </div>
 
-  <!-- LIVE -->
-  <div id="tab-live">
-    <div id="importBanner" class="import-banner" style="display:none">
-      <div><p>📥 FEMS-Daten bereit zum Importieren</p><small id="importInfo">—</small></div>
-      <button class="btn btn-primary" style="padding:8px 14px;font-size:12px" onclick="quickImport()">Importieren</button>
+  <!-- ═══ SCHNELLEINGABE ═══ -->
+  <div id="tab-schnell">
+    <div class="quick-header">
+      <h2>📊 FEMS Monatswerte eingeben</h2>
+      <p>Öffne FEMS → Historie → gewünschter Monat → Werte hier abtippen</p>
     </div>
-    <div class="live-grid">
-      <div class="lcard"><div class="lv" id="lv-pv" style="color:#fbbf24">—</div><div class="ll">☀️ PV Leistung</div></div>
-      <div class="lcard"><div class="lv" id="lv-home" style="color:var(--accent)">—</div><div class="ll">🏠 Verbrauch</div></div>
-      <div class="lcard"><div class="lv" id="lv-grid" style="color:var(--red)">—</div><div class="ll">⚡ Netz</div></div>
-      <div class="lcard"><div class="lv" id="lv-bat" style="color:var(--accent2)">—</div><div class="ll">🔋 Speicher</div></div>
+
+    <!-- FEMS Link -->
+    <a id="femsLink" href="#" class="fems-link" onclick="openFems(event)">
+      🔗 FEMS öffnen (Historie)
+    </a>
+
+    <!-- Monat/Jahr Auswahl -->
+    <div class="month-selector">
+      <select id="qYear"></select>
+      <select id="qMonth"></select>
     </div>
-    <div class="card">
-      <h3>🔋 Batterieladestand</h3>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-        <span style="font-size:13px;color:var(--muted)">SOC</span>
-        <span id="lv-soc" style="font-family:'JetBrains Mono';font-weight:700;font-size:20px;color:var(--accent2)">—%</span>
+
+    <!-- Eingabefelder — exakt wie FEMS -->
+    <div class="fems-field">
+      <div class="fems-field-left">
+        <div class="fems-field-icon">☀️</div>
+        <div>
+          <div class="fems-field-label">Erzeugung</div>
+          <div class="fems-field-sub">PV gesamt kWh</div>
+        </div>
       </div>
-      <div class="soc-bar"><div class="afill" id="socFill" style="width:0"></div></div>
-      <div style="display:flex;justify-content:space-between;">
-        <span style="font-size:10px;color:var(--muted)">0%</span>
-        <span id="socLabel" style="font-size:10px;color:var(--muted)">—</span>
-        <span style="font-size:10px;color:var(--muted)">100%</span>
-      </div>
+      <input type="number" id="q_erz" step="0.1" min="0" placeholder="0.0" inputmode="decimal">
     </div>
-    <div class="card-grid">
-      <div class="card">
-        <h3>📊 Heute (kWh)</h3>
-        <div class="sr"><span class="sl">PV Ertrag</span><span class="sv" id="td-pv">—</span></div>
-        <div class="sr"><span class="sl">Eigenverbrauch</span><span class="sv" id="td-ev">—</span></div>
-        <div class="sr"><span class="sl">Netzbezug</span><span class="sv neg" id="td-gb">—</span></div>
-        <div class="sr"><span class="sl">Einspeisung</span><span class="sv pos" id="td-gs">—</span></div>
+
+    <div class="fems-field">
+      <div class="fems-field-left">
+        <div class="fems-field-icon">🏠</div>
+        <div>
+          <div class="fems-field-label">Direktverbrauch</div>
+          <div class="fems-field-sub">PV direkt genutzt kWh</div>
+        </div>
       </div>
-      <div class="card">
-        <h3>🔆 Status</h3>
-        <div class="sr"><span class="sl">Autarkie heute</span><span class="sv pos" id="td-aut">—</span></div>
-        <div class="sr"><span class="sl">Eigenverbr.quote</span><span class="sv" id="td-evq">—</span></div>
-        <div class="sr"><span class="sl">Aktualisiert</span><span class="sv" id="lastUpdate" style="font-size:10px">—</span></div>
-        <div class="sr"><span></span><button class="btn btn-secondary" id="refreshBtn" onclick="fetchFems()" style="padding:6px 12px;font-size:11px;">🔄 Neu laden</button></div>
+      <input type="number" id="q_direkt" step="0.1" min="0" placeholder="0.0" inputmode="decimal">
+    </div>
+
+    <div class="fems-field">
+      <div class="fems-field-left">
+        <div class="fems-field-icon">🔋</div>
+        <div>
+          <div class="fems-field-label">Beladung</div>
+          <div class="fems-field-sub">Speicher geladen kWh</div>
+        </div>
       </div>
+      <input type="number" id="q_bel" step="0.1" min="0" placeholder="0.0" inputmode="decimal">
+    </div>
+
+    <div class="fems-field">
+      <div class="fems-field-left">
+        <div class="fems-field-icon">⚡</div>
+        <div>
+          <div class="fems-field-label">Entladung</div>
+          <div class="fems-field-sub">Speicher entladen kWh</div>
+        </div>
+      </div>
+      <input type="number" id="q_entl" step="0.1" min="0" placeholder="0.0" inputmode="decimal">
+    </div>
+
+    <div class="fems-field">
+      <div class="fems-field-left">
+        <div class="fems-field-icon">🔼</div>
+        <div>
+          <div class="fems-field-label">Einspeisung</div>
+          <div class="fems-field-sub">Ins Netz eingespeist kWh</div>
+        </div>
+      </div>
+      <input type="number" id="q_einsp" step="0.1" min="0" placeholder="0.0" inputmode="decimal">
+    </div>
+
+    <div class="fems-field">
+      <div class="fems-field-left">
+        <div class="fems-field-icon">🔽</div>
+        <div>
+          <div class="fems-field-label">Bezug</div>
+          <div class="fems-field-sub">Vom Netz gekauft kWh</div>
+        </div>
+      </div>
+      <input type="number" id="q_bezug" step="0.1" min="0" placeholder="0.0" inputmode="decimal">
+    </div>
+
+    <div class="fems-field">
+      <div class="fems-field-left">
+        <div class="fems-field-icon">📊</div>
+        <div>
+          <div class="fems-field-label">Verbrauch</div>
+          <div class="fems-field-sub">Gesamt Verbrauch kWh</div>
+        </div>
+      </div>
+      <input type="number" id="q_verbr" step="0.1" min="0" placeholder="0.0" inputmode="decimal">
+    </div>
+
+    <button class="import-btn" onclick="quickImport()">
+      ✅ Übernehmen & Speichern
+    </button>
+
+    <div class="result-box" id="resultBox">
+      <h4>✓ Erfolgreich übernommen!</h4>
+      <div id="resultRows"></div>
     </div>
   </div>
 
-  <!-- EINGABE -->
+  <!-- ═══ DETAILS EINGABE ═══ -->
   <div id="tab-eingabe" style="display:none">
     <div class="kpi-grid" id="kpiRow"></div>
     <div class="sec">⚙️ Jahreseinstellungen</div>
@@ -212,16 +278,16 @@ td input[type=number]::-webkit-inner-spin-button{opacity:0;}
     <div class="tw"><table><thead><tr><th>Gerät</th><th>Jan</th><th>Feb</th><th>Mär</th><th>Apr</th><th>Mai</th><th>Jun</th><th>Jul</th><th>Aug</th><th>Sep</th><th>Okt</th><th>Nov</th><th>Dez</th><th>∑</th></tr></thead><tbody id="vcTab"></tbody></table></div>
   </div>
 
-  <!-- GESAMT -->
+  <!-- ═══ GESAMT ═══ -->
   <div id="tab-gesamt" style="display:none">
     <div class="kpi-grid" id="gKpi"></div>
-    <div class="sec">📈 Jahresübersicht 2020–2035</div>
+    <div class="sec">📈 Jahresübersicht</div>
     <div class="tw"><table><thead><tr><th>Jahr</th><th>Verbr.</th><th>Erz.</th><th>Autarkie</th><th>Eigenverbr.</th><th>Erträge €</th><th>Strom €</th></tr></thead><tbody id="gTab"></tbody></table></div>
     <div class="sec">📊 Jahresvergleich</div>
     <div class="card"><div class="chart-wrap" style="height:220px"><canvas id="jahresChart"></canvas></div></div>
   </div>
 
-  <!-- INVESTITION -->
+  <!-- ═══ INVESTITION ═══ -->
   <div id="tab-invest" style="display:none">
     <div class="card-grid">
       <div class="card">
@@ -241,41 +307,25 @@ td input[type=number]::-webkit-inner-spin-button{opacity:0;}
     <div class="card"><div class="chart-wrap" style="height:220px"><canvas id="amortChart"></canvas></div></div>
   </div>
 
-  <!-- FEMS -->
-  <div id="tab-fems" style="display:none">
+  <!-- ═══ EINSTELLUNGEN ═══ -->
+  <div id="tab-einst" style="display:none">
     <div class="card">
-      <h3>🔌 FEMS Verbindung</h3>
-      <div class="field"><label>IP-Adresse (lokales Heimnetz)</label><input type="text" id="femsIp" placeholder="z.B. 192.168.1.100 oder 192.168.0.23"></div>
-      <div class="field"><label>Passwort</label><input type="password" id="femsPw" placeholder="Standard: user"></div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <button class="btn btn-primary" onclick="saveFemsSettings()">💾 Speichern & verbinden</button>
-        <button class="btn btn-secondary" onclick="fetchFems()">🔄 Testen</button>
-      </div>
-      <div id="femsTestResult" style="margin-top:10px;font-size:12px;font-family:'JetBrains Mono';display:none;padding:8px;border-radius:6px;"></div>
-    </div>
-
-    <div class="card">
-      <h3>📥 Monatsdaten importieren</h3>
-      <p style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6;">Tageswerte aus dem FEMS automatisch in die Ertragserfassung übertragen. Wähle Jahr und Monat des Ziel-Eintrags.</p>
+      <h3>🔗 FEMS Adresse</h3>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6;">Trage deine FEMS IP-Adresse ein. Der "FEMS öffnen" Link in der Schnelleingabe führt dich direkt dorthin.</p>
       <div class="field">
-        <label>Ziel: Jahr</label>
-        <select id="importYear" style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:9px;border-radius:8px;font-family:'Syne';width:100%;"></select>
+        <label>FEMS IP-Adresse</label>
+        <input type="text" id="femsIpSetting" placeholder="z.B. 192.168.188.36">
       </div>
-      <div class="field">
-        <label>Ziel: Monat</label>
-        <select id="importMonth" style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:9px;border-radius:8px;font-family:'Syne';width:100%;"></select>
-      </div>
-      <button class="btn btn-primary" onclick="importToMonth()" style="width:100%">📥 Jetzt importieren</button>
-      <div id="importResult" style="margin-top:10px;font-size:12px;display:none;padding:8px;border-radius:6px;"></div>
+      <button class="btn btn-primary" onclick="saveFemsIp()">💾 Speichern</button>
     </div>
-
-    <div class="card">
-      <h3>ℹ️ Wie es funktioniert</h3>
-      <p style="font-size:12px;color:var(--muted);line-height:1.8;">
-        <strong style="color:var(--text)">Im Heimnetz (WLAN):</strong> App verbindet sich automatisch mit FEMS und zeigt Live-Daten.<br>
-        <strong style="color:var(--text)">Unterwegs:</strong> Keine Verbindung möglich – vorhandene gespeicherte Daten bleiben sichtbar.<br>
-        <strong style="color:var(--text)">IP finden:</strong> FEMS-Weboberfläche aufrufen → dort steht die IP-Adresse. Oder im Router nachschauen.
-      </p>
+    <div class="card" style="margin-top:12px;">
+      <h3>💱 Strompreis schnell setzen</h3>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Setze den Strompreis für alle Monate des gewählten Jahres auf einmal.</p>
+      <div class="sr">
+        <span class="sl">Preis für alle Monate (€/kWh)</span>
+        <input type="number" id="allMonthPrice" step="0.01" min="0" placeholder="0.41" style="background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.2);color:var(--accent);font-family:'JetBrains Mono';font-size:13px;width:90px;padding:5px 8px;border-radius:4px;text-align:right;outline:none;">
+      </div>
+      <button class="btn btn-primary" style="margin-top:10px;width:100%" onclick="setAllMonthPrices()">✅ Für alle Monate setzen</button>
     </div>
   </div>
 </main>
@@ -286,6 +336,7 @@ td input[type=number]::-webkit-inner-spin-button{opacity:0;}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
 const MONTHS=['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+const MONTHS_FULL=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
 const YEARS=[2020,2021,2022,2023,2024,2025,2026,2027,2028,2029,2030,2031,2032,2033,2034,2035];
 
 const PREFILLED={
@@ -304,34 +355,36 @@ const PREFILLED={
     erzeugung:{direkt:[127.7,225.4,469.4,600.3,702.2,800.6,693.1,744.9,366.2,243,136.2,114.6],aufladen:[116.8,166.8,243.5,238.3,223.6,249,266.3,236,216.9,173.4,102.1,89.5],eingespeist:[23,71.8,339.6,594.6,672.1,537.3,356.3,555.6,194.2,97.9,35.7,13.2]},
     verbraucher:{'Skoda':[124,131.3,89.9,98.2,98.8,103.6,89.5,71.3,67.3,46.5,85.8,93.9],'Twingo':[44.7,21.9,38.6,45.7,39.7,27.4,61.1,41,71.3,72.6,88.6,33]},
     investition:21485.0886,speicherInvest:8093.9914},
-  2026:{strompreis:0,einspeisung:.082,kwp:11.4,monatPreis:Array(12).fill(0),
+  2026:{strompreis:.41,einspeisung:.082,kwp:11.4,monatPreis:[.41,.41,.41,.41,.41,.41,.41,.41,.41,.41,.41,.41],
     verbrauch:{direkt:[126.2,153.1,0,0,0,0,0,0,0,0,0,0],entladen:[85.4,79.9,0,0,0,0,0,0,0,0,0,0],gekauft:[592.9,523,0,0,0,0,0,0,0,0,0,0]},
     erzeugung:{direkt:[126.2,153.1,0,0,0,0,0,0,0,0,0,0],aufladen:[96,89.3,0,0,0,0,0,0,0,0,0,0],eingespeist:[19,35.9,0,0,0,0,0,0,0,0,0,0]},
     verbraucher:{'Skoda':[80.3,95.5,0,0,0,0,0,0,0,0,0,0],'Twingo':[90,92.4,0,0,0,0,0,0,0,0,0,0]},
     investition:18151.395,speicherInvest:7378.6808}
 };
 
-function defYear(){return{strompreis:0,einspeisung:.082,kwp:11.4,monatPreis:Array(12).fill(0),verbrauch:{direkt:Array(12).fill(0),entladen:Array(12).fill(0),gekauft:Array(12).fill(0)},erzeugung:{direkt:Array(12).fill(0),aufladen:Array(12).fill(0),eingespeist:Array(12).fill(0)},verbraucher:{Skoda:Array(12).fill(0),Twingo:Array(12).fill(0)},investition:18146.89,speicherInvest:7393.88};}
+function defYear(){return{strompreis:.41,einspeisung:.082,kwp:11.4,monatPreis:Array(12).fill(.41),verbrauch:{direkt:Array(12).fill(0),entladen:Array(12).fill(0),gekauft:Array(12).fill(0)},erzeugung:{direkt:Array(12).fill(0),aufladen:Array(12).fill(0),eingespeist:Array(12).fill(0)},verbraucher:{Skoda:Array(12).fill(0),Twingo:Array(12).fill(0)},investition:18146.89,speicherInvest:7393.88};}
 
-let selYear=2026, allData={}, fems={ip:'',pw:'user'}, liveData={}, charts={}, timer=null;
+let selYear=2026,allData={},femsIp='',charts={};
 
 function init(){
   try{allData=JSON.parse(localStorage.getItem('solarData')||'{}');}catch(e){allData={};}
   YEARS.forEach(y=>{if(!allData[y])allData[y]=PREFILLED[y]?JSON.parse(JSON.stringify(PREFILLED[y])):defYear();});
-  try{fems=JSON.parse(localStorage.getItem('femsSettings')||'{}');fems.ip=fems.ip||'';fems.pw=fems.pw||'user';}catch(e){}
+  femsIp=localStorage.getItem('femsIp')||'';
   buildYearBar();
-  buildImportSelects();
+  buildQuickSelects();
   selectYear(selYear);
-  if(fems.ip)setTimeout(fetchFems,800);
+  updateFemsLink();
+  if(femsIp)document.getElementById('femsIpSetting').value=femsIp;
 }
 
+// ── YEAR BAR ──
 function buildYearBar(){
   const bar=document.getElementById('yearBar');bar.innerHTML='';
   YEARS.forEach(y=>{
     const b=document.createElement('button');
     b.className='ybtn'+(y===selYear?' active':'');
-    const d=allData[y],hasData=d&&(sum(d.verbrauch?.direkt||[])+sum(d.erzeugung?.direkt||[]))>0;
-    if(hasData)b.classList.add('has-data');
+    const d=allData[y],hd=d&&(sum(d.verbrauch?.direkt||[])+sum(d.erzeugung?.direkt||[]))>0;
+    if(hd)b.classList.add('has-data');
     b.textContent=y;b.onclick=()=>selectYear(y);bar.appendChild(b);
   });
 }
@@ -339,18 +392,117 @@ function buildYearBar(){
 function selectYear(y){
   selYear=parseInt(y);
   document.querySelectorAll('.ybtn').forEach(b=>b.classList.toggle('active',parseInt(b.textContent)===selYear));
+  // sync quick selects
+  document.getElementById('qYear').value=selYear;
   renderYear();
 }
 
+// ── QUICK SELECTS ──
+function buildQuickSelects(){
+  const ys=document.getElementById('qYear');
+  const ms=document.getElementById('qMonth');
+  const now=new Date();
+  YEARS.forEach(y=>{const o=document.createElement('option');o.value=y;o.textContent=y;if(y===selYear)o.selected=true;ys.appendChild(o);});
+  MONTHS_FULL.forEach((m,i)=>{const o=document.createElement('option');o.value=i;o.textContent=m;if(i===now.getMonth())o.selected=true;ms.appendChild(o);});
+  ys.onchange=()=>selectYear(parseInt(ys.value));
+}
+
+// ── FEMS LINK ──
+function updateFemsLink(){
+  const el=document.getElementById('femsLink');
+  if(femsIp){
+    el.href=`http://${femsIp}`;
+    el.textContent=`🔗 FEMS öffnen → http://${femsIp}`;
+  } else {
+    el.href='#';
+    el.textContent='🔗 FEMS öffnen (erst IP in Einstellungen eintragen)';
+  }
+}
+
+function openFems(e){
+  if(!femsIp){e.preventDefault();showToast('Erst IP in ⚙️ Einstellungen eintragen!','err');return;}
+  // open in new tab
+  window.open(`http://${femsIp}`,'_blank');
+  e.preventDefault();
+}
+
+// ── SCHNELLEINGABE ──
+function quickImport(){
+  const year=parseInt(document.getElementById('qYear').value);
+  const month=parseInt(document.getElementById('qMonth').value);
+
+  const erz=parseFloat(document.getElementById('q_erz').value)||0;
+  const direkt=parseFloat(document.getElementById('q_direkt').value)||0;
+  const bel=parseFloat(document.getElementById('q_bel').value)||0;
+  const entl=parseFloat(document.getElementById('q_entl').value)||0;
+  const einsp=parseFloat(document.getElementById('q_einsp').value)||0;
+  const bezug=parseFloat(document.getElementById('q_bezug').value)||0;
+  const verbr=parseFloat(document.getElementById('q_verbr').value)||0;
+
+  if(erz===0&&direkt===0&&bezug===0){showToast('Bitte zuerst Werte eingeben!','err');return;}
+
+  const d=allData[year];
+  // Erzeugung
+  d.erzeugung.direkt[month]=direkt;
+  d.erzeugung.aufladen[month]=bel;
+  d.erzeugung.eingespeist[month]=einsp;
+  // Verbrauch
+  d.verbrauch.direkt[month]=direkt;
+  d.verbrauch.entladen[month]=entl;
+  d.verbrauch.gekauft[month]=bezug;
+
+  localStorage.setItem('solarData',JSON.stringify(allData));
+  buildYearBar();
+  if(year===selYear)renderYear();
+
+  // Ergebnis anzeigen
+  const v=calcStats(d);
+  const rows=[
+    ['Erzeugung',erz+' kWh'],
+    ['Direktverbrauch',direkt+' kWh'],
+    ['Beladung Speicher',bel+' kWh'],
+    ['Entladung Speicher',entl+' kWh'],
+    ['Einspeisung',einsp+' kWh'],
+    ['Netzbezug',bezug+' kWh'],
+    ['Autarkie Monat',v.autarkie?(((direkt+entl)/(direkt+entl+bezug))*100).toFixed(1)+'%':'—'],
+  ];
+  document.getElementById('resultRows').innerHTML=rows.map(r=>`<div class="result-row"><span>${r[0]}</span><span>${r[1]}</span></div>`).join('');
+  const rb=document.getElementById('resultBox');rb.classList.add('show');
+  rb.querySelector('h4').textContent=`✓ ${MONTHS_FULL[month]} ${year} gespeichert!`;
+
+  showToast(`${MONTHS[month]} ${year} übernommen!`,'ok');
+
+  // Felder leeren für nächste Eingabe
+  setTimeout(()=>{
+    ['q_erz','q_direkt','q_bel','q_entl','q_einsp','q_bezug','q_verbr'].forEach(id=>document.getElementById(id).value='');
+  },1500);
+}
+
+// ── EINSTELLUNGEN ──
+function saveFemsIp(){
+  femsIp=document.getElementById('femsIpSetting').value.trim();
+  localStorage.setItem('femsIp',femsIp);
+  updateFemsLink();
+  showToast('FEMS-Adresse gespeichert!','ok');
+}
+
+function setAllMonthPrices(){
+  const p=parseFloat(document.getElementById('allMonthPrice').value)||0;
+  if(!p){showToast('Bitte einen Preis eingeben!','err');return;}
+  allData[selYear].monatPreis=Array(12).fill(p);
+  allData[selYear].strompreis=p;
+  renderYear();
+  showToast(`Alle Monate auf €${p}/kWh gesetzt!`,'ok');
+}
+
+// ── RENDER ──
 function renderYear(){
   const d=allData[selYear];
-  // inputs
   document.getElementById('inp_sp').value=d.strompreis||'';
   document.getElementById('inp_ev').value=d.einspeisung||'';
   document.getElementById('inp_kw').value=d.kwp||'';
   document.getElementById('inp_inv').value=d.investition||'';
   document.getElementById('inp_si').value=d.speicherInvest||'';
-  // monat preise
   document.getElementById('monatPreise').innerHTML=MONTHS.map((m,i)=>`
     <div style="display:flex;align-items:center;justify-content:space-between;padding:2px 0;font-size:11px;">
       <span style="color:var(--muted);font-family:'JetBrains Mono'">${m}</span>
@@ -376,7 +528,6 @@ function renderKPIs(d,id){
 }
 
 function renderTables(d){
-  // Verbrauch
   let vH=[{l:'Direkt',k:'direkt',c:'pos'},{l:'Entladen',k:'entladen',c:'pos'},{l:'Gekauft',k:'gekauft',c:'neg'}].map(r=>{
     const vals=d.verbrauch[r.k]||Array(12).fill(0);
     return`<tr><td>${r.l}</td>${vals.map((v,i)=>`<td><input type="number" step="0.1" value="${v||''}" onchange="updV('${r.k}',${i},this.value)"></td>`).join('')}<td class="tot">${fmt(sum(vals))}</td></tr>`;
@@ -384,7 +535,7 @@ function renderTables(d){
   const vg=MONTHS.map((_,i)=>(d.verbrauch.direkt?.[i]||0)+(d.verbrauch.entladen?.[i]||0)+(d.verbrauch.gekauft?.[i]||0));
   vH+=`<tr style="background:rgba(245,158,11,.04)"><td style="color:var(--accent);font-weight:700">Gesamt</td>${vg.map(v=>`<td class="tot">${v?fmt(v):''}</td>`).join('')}<td class="tot">${fmt(sum(vg))}</td></tr>`;
   document.getElementById('vTab').innerHTML=vH;
-  // Erzeugung
+
   let eH=[{l:'Direkt',k:'direkt'},{l:'Aufladen',k:'aufladen'},{l:'Eingespeist',k:'eingespeist'}].map(r=>{
     const vals=d.erzeugung[r.k]||Array(12).fill(0);
     return`<tr><td>${r.l}</td>${vals.map((v,i)=>`<td><input type="number" step="0.1" value="${v||''}" onchange="updE('${r.k}',${i},this.value)"></td>`).join('')}<td class="tot">${fmt(sum(vals))}</td></tr>`;
@@ -392,7 +543,7 @@ function renderTables(d){
   const eg=MONTHS.map((_,i)=>(d.erzeugung.direkt?.[i]||0)+(d.erzeugung.aufladen?.[i]||0)+(d.erzeugung.eingespeist?.[i]||0));
   eH+=`<tr style="background:rgba(245,158,11,.04)"><td style="color:var(--accent);font-weight:700">Gesamt</td>${eg.map(v=>`<td class="tot">${v?fmt(v):''}</td>`).join('')}<td class="tot">${fmt(sum(eg))}</td></tr>`;
   document.getElementById('eTab').innerHTML=eH;
-  // Verbraucher
+
   const vc=d.verbraucher||{};
   let vcH=Object.keys(vc).map(name=>{
     const vals=vc[name]||Array(12).fill(0);const sn=name.replace(/'/g,"\\'");
@@ -403,7 +554,7 @@ function renderTables(d){
 }
 
 function renderGesamt(){
-  let html='';let cumE=0;
+  let html='',cumE=0;
   YEARS.forEach(y=>{
     const d=allData[y];if(!d)return;
     const v=calcStats(d);cumE+=v.ertraege;
@@ -446,133 +597,7 @@ function renderInvest(d){
   buildAmortChart();
 }
 
-// ── FEMS ──────────────────────────────────────────────────
-async function fetchFems(){
-  if(!fems.ip){updatePill('disconnected','Keine IP');return;}
-  updatePill('loading','Verbinde…');
-  document.getElementById('refreshBtn').disabled=true;
-  const headers={'Authorization':'Basic '+btoa('x:'+(fems.pw||'user'))};
-  const base=`http://${fems.ip}:80/rest/channel`;
-  const chs=['_sum/ProductionActivePower','_sum/ConsumptionActivePower','_sum/GridActivePower',
-    '_sum/EssSoc','_sum/EssActivePower','_sum/ProductionActiveEnergy',
-    '_sum/ConsumptionActiveEnergy','_sum/GridBuyActiveEnergy','_sum/GridSellActiveEnergy',
-    '_sum/EssActiveChargeEnergy','_sum/EssActiveDischargeEnergy'];
-  try{
-    const res=await Promise.allSettled(chs.map(ch=>fetch(`${base}/${ch}`,{headers,signal:AbortSignal.timeout(5000)}).then(r=>r.ok?r.json():null).catch(()=>null)));
-    const v=res.map(r=>r.status==='fulfilled'?r.value?.value??null:null);
-    const [pvW,conW,gridW,soc,batW,pvE,conE,gridBuy,gridSell,essCha,essDis]=v;
-    if(pvW===null&&conW===null&&soc===null)throw new Error('keine Antwort');
-    liveData={pvW,conW,gridW,soc,batW,pvE,conE,gridBuy,gridSell,essCha,essDis,ts:new Date()};
-    updateLiveUI();
-    updatePill('connected','FEMS Online');
-    const tr=document.getElementById('femsTestResult');tr.style.display='block';tr.style.background='rgba(52,211,153,.1)';tr.style.color='var(--accent3)';tr.textContent='✓ Verbunden – '+new Date().toLocaleTimeString('de-DE');
-    clearInterval(timer);timer=setInterval(fetchFems,30000);
-    showImportBanner();
-  }catch(e){
-    updatePill('disconnected','Offline');
-    const tr=document.getElementById('femsTestResult');tr.style.display='block';tr.style.background='rgba(248,113,113,.1)';tr.style.color='var(--red)';tr.textContent='✗ Nicht erreichbar. Nur im Heimnetz möglich.';
-  }
-  document.getElementById('refreshBtn').disabled=false;
-}
-
-function updateLiveUI(){
-  const d=liveData;
-  const W=v=>v!==null&&v!==undefined?(v/1000).toFixed(2)+' kW':'—';
-  const kWh=v=>v!==null&&v!==undefined?(v/1000).toFixed(1)+' kWh':'—';
-  document.getElementById('lv-pv').textContent=W(d.pvW);
-  document.getElementById('lv-home').textContent=W(d.conW);
-  if(d.gridW!==null&&d.gridW!==undefined){
-    document.getElementById('lv-grid').textContent=d.gridW>0?W(d.gridW):W(-d.gridW)+' Einsp.';
-    document.getElementById('lv-grid').style.color=d.gridW>0?'var(--red)':'var(--accent3)';
-  }
-  if(d.batW!==null&&d.batW!==undefined){
-    const el=document.getElementById('lv-bat');
-    el.textContent=d.batW>100?W(d.batW)+' ↑':d.batW<-100?W(-d.batW)+' ↓':'Standby';
-    el.style.color=d.batW>100?'var(--accent3)':d.batW<-100?'var(--accent2)':'var(--muted)';
-  }
-  if(d.soc!==null&&d.soc!==undefined){
-    document.getElementById('lv-soc').textContent=d.soc+'%';
-    document.getElementById('socFill').style.width=d.soc+'%';
-    document.getElementById('socLabel').textContent=d.soc<20?'🔴 Niedrig':d.soc<60?'🟡 Mittel':'🟢 Gut';
-  }
-  document.getElementById('td-pv').textContent=kWh(d.pvE);
-  const ev=d.conE!==null&&d.gridBuy!==null?Math.max(0,d.conE-d.gridBuy):null;
-  document.getElementById('td-ev').textContent=kWh(ev);
-  document.getElementById('td-gb').textContent=kWh(d.gridBuy);
-  document.getElementById('td-gs').textContent=kWh(d.gridSell);
-  const aut=d.conE>0&&d.gridBuy!==null?Math.max(0,(1-d.gridBuy/d.conE)*100):null;
-  document.getElementById('td-aut').textContent=aut!==null?aut.toFixed(1)+'%':'—';
-  const evq=d.pvE>0?Math.max(0,((d.pvE-(d.gridSell||0))/d.pvE)*100):null;
-  document.getElementById('td-evq').textContent=evq!==null?evq.toFixed(1)+'%':'—';
-  document.getElementById('lastUpdate').textContent=d.ts?d.ts.toLocaleTimeString('de-DE'):'—';
-}
-
-function showImportBanner(){
-  const d=liveData;if(!d.pvE&&!d.conE)return;
-  document.getElementById('importBanner').style.display='flex';
-  document.getElementById('importInfo').textContent=`PV heute: ${d.pvE?(d.pvE/1000).toFixed(1):'?'} kWh  ·  Verbrauch: ${d.conE?(d.conE/1000).toFixed(1):'?'} kWh`;
-}
-
-async function quickImport(){
-  const now=new Date();
-  document.getElementById('importYear').value=now.getFullYear();
-  document.getElementById('importMonth').value=now.getMonth();
-  await importToMonth();
-}
-
-async function importToMonth(){
-  const year=parseInt(document.getElementById('importYear').value);
-  const month=parseInt(document.getElementById('importMonth').value);
-  if(!fems.ip){showToast('Erst FEMS-IP im ⚙️ FEMS-Tab eingeben!','err');return;}
-  const ir=document.getElementById('importResult');ir.style.display='block';ir.style.background='rgba(245,158,11,.08)';ir.style.color='var(--muted)';ir.textContent='⏳ Lade Daten…';
-  const headers={'Authorization':'Basic '+btoa('x:'+(fems.pw||'user'))};
-  const base=`http://${fems.ip}:80/rest/channel`;
-  const chs=['_sum/ProductionActiveEnergy','_sum/ConsumptionActiveEnergy','_sum/GridBuyActiveEnergy','_sum/GridSellActiveEnergy','_sum/EssActiveChargeEnergy','_sum/EssActiveDischargeEnergy'];
-  try{
-    const res=await Promise.allSettled(chs.map(ch=>fetch(`${base}/${ch}`,{headers,signal:AbortSignal.timeout(5000)}).then(r=>r.ok?r.json():null).catch(()=>null)));
-    const vals=res.map(r=>r.status==='fulfilled'?r.value?.value??null:null);
-    const [pvE,conE,gridBuy,gridSell,essCha,essDis]=vals.map(v=>v!==null?Math.round(v/100)/10:null);
-    const direkt=pvE!==null&&gridSell!==null&&essCha!==null?Math.max(0,pvE-gridSell-essCha):pvE!==null&&gridSell!==null?Math.max(0,pvE-gridSell):null;
-    const d=allData[year];
-    if(direkt!==null){d.verbrauch.direkt[month]=direkt;d.erzeugung.direkt[month]=direkt;}
-    if(essCha!==null)d.erzeugung.aufladen[month]=essCha;
-    if(essDis!==null)d.verbrauch.entladen[month]=essDis;
-    if(gridSell!==null)d.erzeugung.eingespeist[month]=gridSell;
-    if(gridBuy!==null)d.verbrauch.gekauft[month]=gridBuy;
-    localStorage.setItem('solarData',JSON.stringify(allData));
-    if(year===selYear)renderYear();
-    buildYearBar();
-    ir.style.background='rgba(52,211,153,.1)';ir.style.color='var(--accent3)';
-    ir.textContent=`✓ ${MONTHS[month]} ${year} importiert!  PV: ${pvE??'?'} kWh · Verbrauch: ${conE??'?'} kWh`;
-    showToast('Import erfolgreich!','ok');
-  }catch(e){
-    ir.style.background='rgba(248,113,113,.1)';ir.style.color='var(--red)';
-    ir.textContent='✗ Import fehlgeschlagen – nur im Heimnetz möglich';
-  }
-}
-
-function updatePill(state,text){
-  const p=document.getElementById('femsPill');
-  p.className='fems-pill '+state;
-  document.getElementById('femsDot').className='fems-dot'+(state==='loading'?' pulse':'');
-  document.getElementById('femsStatus').textContent=text;
-}
-
-function saveFemsSettings(){
-  fems.ip=document.getElementById('femsIp').value.trim();
-  fems.pw=document.getElementById('femsPw').value||'user';
-  localStorage.setItem('femsSettings',JSON.stringify(fems));
-  showToast('FEMS-Zugangsdaten gespeichert!','ok');
-  fetchFems();
-}
-
-function buildImportSelects(){
-  const ys=document.getElementById('importYear');const ms=document.getElementById('importMonth');
-  YEARS.forEach(y=>{const o=document.createElement('option');o.value=y;o.textContent=y;if(y===selYear)o.selected=true;ys.appendChild(o);});
-  MONTHS.forEach((m,i)=>{const o=document.createElement('option');o.value=i;o.textContent=m;if(i===new Date().getMonth())o.selected=true;ms.appendChild(o);});
-}
-
-// ── CHARTS ────────────────────────────────────────────────
+// ── CHARTS ──
 function buildJahresChart(){
   const ctx=document.getElementById('jahresChart');if(!ctx)return;
   if(charts.j)charts.j.destroy();
@@ -584,6 +609,7 @@ function buildJahresChart(){
     {label:'Autarkie %',data:aut,type:'line',borderColor:'#22d3ee',tension:.4,borderWidth:2,pointBackgroundColor:'#22d3ee',yAxisID:'y2'},
   ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a3b8',font:{family:'JetBrains Mono',size:10}}}},scales:{x:{grid:{color:'rgba(30,48,80,.4)'},ticks:{color:'#64748b',font:{family:'JetBrains Mono',size:10}}},y:{grid:{color:'rgba(30,48,80,.4)'},ticks:{color:'#64748b',font:{family:'JetBrains Mono',size:10}}},y2:{position:'right',grid:{drawOnChartArea:false},ticks:{color:'#22d3ee',font:{family:'JetBrains Mono',size:10},callback:v=>v+'%'}}}}});
 }
+
 function buildAmortChart(){
   const ctx=document.getElementById('amortChart');if(!ctx)return;
   if(charts.a)charts.a.destroy();
@@ -596,17 +622,16 @@ function buildAmortChart(){
   ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a3b8',font:{family:'JetBrains Mono',size:10}}}},scales:{x:{grid:{color:'rgba(30,48,80,.4)'},ticks:{color:'#64748b',font:{family:'JetBrains Mono',size:10}}},y:{grid:{color:'rgba(30,48,80,.4)'},ticks:{color:'#64748b',font:{family:'JetBrains Mono',size:10},callback:v=>'€'+v}}}}});
 }
 
-// ── TABS ─────────────────────────────────────────────────
+// ── TABS ──
 function showTab(name,btn){
-  ['live','eingabe','gesamt','invest','fems'].forEach(t=>document.getElementById('tab-'+t).style.display=t===name?'':'none');
+  ['schnell','eingabe','gesamt','invest','einst'].forEach(t=>document.getElementById('tab-'+t).style.display=t===name?'':'none');
   document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
   if(btn)btn.classList.add('active');
-  if(name==='fems'){document.getElementById('femsIp').value=fems.ip||'';document.getElementById('femsPw').value=fems.pw||'';}
   if(name==='gesamt')renderGesamt();
   if(name==='invest')renderInvest(allData[selYear]);
 }
 
-// ── UPDATERS ────────────────────────────────────────────
+// ── UPDATERS ──
 function updV(k,i,v){allData[selYear].verbrauch[k][i]=parseFloat(v)||0;saveAndRecalc();}
 function updE(k,i,v){allData[selYear].erzeugung[k][i]=parseFloat(v)||0;saveAndRecalc();}
 function updVC(n,i,v){if(!allData[selYear].verbraucher[n])allData[selYear].verbraucher[n]=Array(12).fill(0);allData[selYear].verbraucher[n][i]=parseFloat(v)||0;saveAndRecalc();}
@@ -628,16 +653,16 @@ function saveAndRecalc(){
 
 function saveData(){
   const d=allData[selYear];
-  d.strompreis=parseFloat(document.getElementById('inp_sp').value)||0;
-  d.einspeisung=parseFloat(document.getElementById('inp_ev').value)||0;
-  d.kwp=parseFloat(document.getElementById('inp_kw').value)||0;
-  d.investition=parseFloat(document.getElementById('inp_inv').value)||0;
-  d.speicherInvest=parseFloat(document.getElementById('inp_si').value)||0;
+  try{d.strompreis=parseFloat(document.getElementById('inp_sp').value)||0;}catch(e){}
+  try{d.einspeisung=parseFloat(document.getElementById('inp_ev').value)||0;}catch(e){}
+  try{d.kwp=parseFloat(document.getElementById('inp_kw').value)||0;}catch(e){}
+  try{d.investition=parseFloat(document.getElementById('inp_inv').value)||0;}catch(e){}
+  try{d.speicherInvest=parseFloat(document.getElementById('inp_si').value)||0;}catch(e){}
   localStorage.setItem('solarData',JSON.stringify(allData));
   showToast('✓ Gespeichert!','ok');
 }
 
-// ── STATS ───────────────────────────────────────────────
+// ── STATS ──
 function calcStats(d){
   const vD=sum(d.verbrauch?.direkt||[]),vE=sum(d.verbrauch?.entladen||[]),vG=sum(d.verbrauch?.gekauft||[]);
   const verbrauchGes=vD+vE+vG;
@@ -652,7 +677,6 @@ function calcStats(d){
   return{verbrauchGes,erzeugungGes,autarkie,eigenverbr,ertraege,stromkauf};
 }
 
-// ── HELPERS ────────────────────────────────────────────
 function sum(a){return(a||[]).reduce((x,b)=>x+(parseFloat(b)||0),0);}
 function fmt(n){return n?n.toLocaleString('de-DE',{maximumFractionDigits:1}):'0';}
 function fmt2(n){return n?n.toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}):'0,00';}
