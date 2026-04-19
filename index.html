@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0a1628">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Solar Tracker">
+<title>Solar Tracker – Tondo / Fuchs</title>
+<link rel="manifest" href="manifest.json">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+:root{
+  --bg:#070e1c;--surface:#0d1b2e;--card:#111f35;--border:#1e3050;
+  --accent:#f59e0b;--a2:#22d3ee;--a3:#34d399;--red:#f87171;
+  --text:#e2e8f0;--muted:#64748b;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+/* HEADER */
+header{background:linear-gradient(135deg,#0a1628,#0f2040,#0a1628);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;}
+.logo-icon{width:34px;height:34px;background:linear-gradient(135deg,#fbbf24,#f97316);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.logo-text{font-size:15px;font-weight:800;}
+.logo-sub{font-size:10px;color:var(--muted);font-family:'JetBrains Mono';}
+
+/* YEAR BAR */
+.ybar{background:var(--surface);border-bottom:1px solid var(--border);padding:8px 12px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;}
+.ybar::-webkit-scrollbar{display:none;}
+.ybtn{flex-shrink:0;background:transparent;border:1px solid var(--border);color:var(--muted);padding:5px 11px;border-radius:6px;font-family:'JetBrains Mono';font-size:12px;cursor:pointer;}
+.ybtn.active{background:var(--accent);color:#000;border-color:var(--accent);font-weight:700;}
+.ybtn.has-data{border-color:rgba(52,211,153,.4);color:var(--a3);}
+.ybtn.active{background:var(--accent);color:#000 !important;border-color:var(--accent);}
+
+/* MAIN */
+main{max-width:860px;margin:0 auto;padding:14px 12px 90px;}
+
+/* TABS */
+.tabs{display:flex;gap:3px;background:var(--surface);border-radius:10px;padding:4px;margin-bottom:14px;border:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{flex:0 0 auto;padding:7px 13px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;color:var(--muted);border:none;background:none;white-space:nowrap;}
+.tab.active{background:var(--accent);color:#000;}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;}
+.card-h{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;font-family:'JetBrains Mono';}
+.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:500px){.card-grid{grid-template-columns:1fr;}}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+@media(max-width:480px){.kpi-grid{grid-template-columns:repeat(2,1fr);}}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px;position:relative;overflow:hidden;}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--kc,var(--accent));}
+.kpi-l{font-size:10px;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-bottom:3px;font-family:'JetBrains Mono';}
+.kpi-v{font-size:17px;font-weight:700;font-family:'JetBrains Mono';color:var(--kc,var(--text));}
+.kpi-u{font-size:10px;color:var(--muted);margin-top:2px;}
+
+/* SECTION TITLE */
+.sec{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:18px 0 9px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* STAT ROW */
+.sr{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(30,48,80,.35);font-size:13px;}
+.sr:last-child{border-bottom:none;}
+.sl{color:var(--muted);}
+.sv{font-family:'JetBrains Mono';font-weight:600;}
+
+/* TABLE */
+.tw{overflow-x:auto;border-radius:10px;border:1px solid var(--border);margin-bottom:12px;}
+table{width:100%;border-collapse:collapse;font-family:'JetBrains Mono';font-size:11px;}
+thead tr{background:var(--surface);}
+thead th{padding:8px 9px;text-align:right;color:var(--muted);font-size:10px;letter-spacing:.6px;text-transform:uppercase;white-space:nowrap;border-bottom:1px solid var(--border);}
+thead th:first-child{text-align:left;}
+tbody tr{border-bottom:1px solid rgba(30,48,80,.3);}
+tbody tr:last-child{border-bottom:none;}
+td{padding:7px 9px;text-align:right;white-space:nowrap;color:var(--text);}
+td:first-child{text-align:left;color:var(--muted);}
+td.tot{color:var(--accent);font-weight:700;}
+td.pos{color:var(--a3);}
+td.neg{color:var(--red);}
+
+/* TABLE INPUT */
+td input[type=number]{
+  background:rgba(245,158,11,.06);
+  border:1px solid rgba(245,158,11,.25);
+  color:var(--accent);
+  font-family:'JetBrains Mono';
+  font-size:11px;
+  width:68px;
+  padding:3px 5px;
+  border-radius:4px;
+  text-align:right;
+  outline:none;
+  -webkit-appearance:none;
+  appearance:none;
+}
+td input[type=number]:focus{border-color:var(--accent);background:rgba(245,158,11,.12);}
+td input[type=number]::-webkit-inner-spin-button,
+td input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0;}
+
+/* SETTING INPUT */
+.inp{
+  background:rgba(245,158,11,.06);
+  border:1px solid rgba(245,158,11,.25);
+  color:var(--accent);
+  font-family:'JetBrains Mono';
+  font-size:13px;
+  width:100px;
+  padding:5px 8px;
+  border-radius:6px;
+  text-align:right;
+  outline:none;
+  -webkit-appearance:none;
+}
+.inp:focus{border-color:var(--accent);}
+.inp::-webkit-inner-spin-button{-webkit-appearance:none;}
+
+/* TEXT INPUT */
+.tinp{
+  width:100%;
+  background:var(--surface);
+  border:1px solid var(--border);
+  color:var(--text);
+  padding:10px 12px;
+  border-radius:8px;
+  font-family:'Syne';
+  font-size:14px;
+  outline:none;
+  margin-top:5px;
+}
+.tinp:focus{border-color:var(--accent);}
+
+/* FIELD */
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:11px;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;font-family:'JetBrains Mono';}
+
+/* FEMS INPUT FIELD */
+.fi{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.fi-left{display:flex;align-items:center;gap:10px;}
+.fi-icon{font-size:22px;width:32px;text-align:center;flex-shrink:0;}
+.fi-label{font-size:14px;font-weight:700;}
+.fi-sub{font-size:11px;color:var(--muted);margin-top:1px;}
+.fi input{
+  background:rgba(245,158,11,.07);
+  border:2px solid rgba(245,158,11,.3);
+  color:var(--accent);
+  font-family:'JetBrains Mono';
+  font-size:17px;
+  font-weight:700;
+  width:105px;
+  padding:7px 9px;
+  border-radius:7px;
+  text-align:right;
+  outline:none;
+  -webkit-appearance:none;
+}
+.fi input:focus{border-color:var(--accent);background:rgba(245,158,11,.14);}
+.fi input::-webkit-inner-spin-button{-webkit-appearance:none;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 18px;border-radius:8px;font-family:'Syne';font-weight:700;font-size:13px;cursor:pointer;border:none;transition:all .15s;-webkit-tap-highlight-color:transparent;}
+.btn-primary{background:var(--accent);color:#000;}
+.btn-secondary{background:var(--surface);border:1px solid var(--border);color:var(--text);}
+.btn:active{transform:scale(.96);}
+.btn:disabled{opacity:.4;pointer-events:none;}
+
+.import-btn{
+  width:100%;
+  background:linear-gradient(135deg,var(--accent),#f97316);
+  color:#000;
+  font-family:'Syne';
+  font-weight:800;
+  font-size:15px;
+  padding:15px;
+  border-radius:12px;
+  border:none;
+  cursor:pointer;
+  margin-top:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  box-shadow:0 4px 20px rgba(245,158,11,.25);
+  -webkit-tap-highlight-color:transparent;
+}
+.import-btn:active{transform:scale(.97);}
+
+/* UPLOAD AREA */
+.upload-area{
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  background:rgba(34,211,238,.04);
+  border:2px dashed rgba(34,211,238,.3);
+  border-radius:10px;padding:20px;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  transition:background .2s;
+}
+.upload-area:active{background:rgba(34,211,238,.1);}
+
+/* SCREENSHOT QUEUE */
+.ss-queue{display:flex;flex-direction:column;gap:8px;margin-top:10px;}
+.ss-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px;display:flex;align-items:center;gap:10px;}
+.ss-thumb{width:50px;height:40px;object-fit:cover;border-radius:5px;border:1px solid var(--border);}
+.ss-info{flex:1;}
+.ss-name{font-size:12px;font-weight:700;font-family:'JetBrains Mono';}
+.ss-status{font-size:11px;margin-top:2px;}
+.ss-status.waiting{color:var(--muted);}
+.ss-status.loading{color:var(--accent);}
+.ss-status.done{color:var(--a3);}
+.ss-status.error{color:var(--red);}
+
+/* RESULT BOX */
+.result-box{background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.25);border-radius:10px;padding:13px;margin-top:10px;display:none;}
+.result-box.show{display:block;}
+.result-box h4{color:var(--a3);font-size:13px;margin-bottom:8px;}
+.rrow{display:flex;justify-content:space-between;font-size:12px;padding:3px 0;border-bottom:1px solid rgba(52,211,153,.1);}
+.rrow:last-child{border-bottom:none;}
+.rrow span:last-child{font-family:'JetBrains Mono';color:var(--a3);font-weight:700;}
+
+/* FEMS LINK */
+.flink{display:flex;align-items:center;gap:8px;background:rgba(34,211,238,.05);border:1px solid rgba(34,211,238,.2);border-radius:8px;padding:10px 13px;text-decoration:none;color:var(--a2);font-size:13px;font-weight:700;margin-bottom:12px;}
+
+/* AMORT BAR */
+.abar{height:8px;background:var(--border);border-radius:4px;overflow:hidden;margin:10px 0;}
+.afill{height:100%;background:linear-gradient(90deg,var(--a3),var(--accent));border-radius:4px;transition:width .6s ease;}
+
+/* CHART */
+.ch-wrap{position:relative;height:220px;margin-top:8px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:80px;right:14px;padding:9px 16px;border-radius:8px;font-weight:700;font-size:12px;opacity:0;transform:translateY(8px);transition:all .3s;pointer-events:none;z-index:300;}
+.toast.show{opacity:1;transform:translateY(0);}
+.toast.ok{background:var(--a3);color:#000;}
+.toast.err{background:var(--red);color:#fff;}
+
+/* FAB */
+.fab{position:fixed;bottom:18px;right:14px;background:linear-gradient(135deg,var(--accent),#f97316);color:#000;font-family:'Syne';font-weight:700;font-size:13px;padding:11px 20px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 5px 20px rgba(245,158,11,.35);display:flex;align-items:center;gap:6px;z-index:200;-webkit-tap-highlight-color:transparent;}
+.fab:active{transform:scale(.96);}
+
+/* MONTH SELECTOR */
+.msel{display:flex;gap:8px;margin-bottom:12px;}
+.msel select{flex:1;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:8px;font-family:'Syne';font-size:14px;outline:none;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%2364748b' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;}
+.msel select:focus{border-color:var(--accent);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-icon">☀️</div>
+  <div>
+    <div class="logo-text">Solar Tracker</div>
+    <div class="logo-sub">Tondo / Fuchs · 11.4 kWp</div>
+  </div>
+</header>
+
+<div class="ybar" id="ybar"></div>
+
+<main>
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('import',this)">📸 Import</button>
+    <button class="tab" onclick="showTab('daten',this)">📋 Daten</button>
+    <button class="tab" onclick="showTab('gesamt',this)">📈 Gesamt</button>
+    <button class="tab" onclick="showTab('vergleich',this)">🏆 Vergleich</button>
+    <button class="tab" onclick="showTab('invest',this)">💰 Invest</button>
+    <button class="tab" onclick="showTab('einst',this)">⚙️ Einst.</button>
+  </div>
+
+  <!-- ══════════════ IMPORT TAB ══════════════ -->
+  <div id="tab-import">
+
+    <!-- Screenshot Upload -->
+    <div class="card" style="border-color:rgba(34,211,238,.3);">
+      <div class="card-h">📸 Screenshots hochladen</div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.6;">
+        Mache einen Screenshot vom FEMS Energiemonitor (Monatsansicht) und lade ihn hoch. Du kannst auch <strong style="color:var(--text)">mehrere Screenshots auf einmal</strong> hochladen — z.B. alle Monate eines Jahres!
+      </p>
+
+      <label class="upload-area" for="ssInput">
+        <span style="font-size:36px">📷</span>
+        <span style="font-size:15px;font-weight:700;color:var(--a2)">Screenshots auswählen</span>
+        <span style="font-size:11px;color:var(--muted)">Mehrere möglich — tippe hier</span>
+      </label>
+      <input type="file" id="ssInput" accept="image/*" multiple style="display:none" onchange="addScreenshots(this)">
+
+      <div id="ssQueue" class="ss-queue"></div>
+
+      <button class="import-btn" id="processBtn" onclick="processAllScreenshots()" style="display:none">
+        🤖 Alle auslesen & speichern
+      </button>
+    </div>
+
+    <!-- Manual Input -->
+    <div class="card" style="margin-top:4px;">
+      <div class="card-h">✏️ Manuell eingeben</div>
+
+      <a id="femsLink" href="#" class="flink" onclick="openFems(event)">🔗 FEMS öffnen</a>
+
+      <div class="msel">
+        <select id="qYear" onchange="selectYear(parseInt(this.value))"></select>
+        <select id="qMonth"></select>
+      </div>
+
+      <div class="fi"><div class="fi-left"><div class="fi-icon">☀️</div><div><div class="fi-label">Erzeugung</div><div class="fi-sub">PV gesamt kWh</div></div></div><input type="number" id="q_erz" step="0.1" min="0" placeholder="0.0" inputmode="decimal"></div>
+      <div class="fi"><div class="fi-left"><div class="fi-icon">🏠</div><div><div class="fi-label">Direktverbrauch</div><div class="fi-sub">PV direkt genutzt kWh</div></div></div><input type="number" id="q_direkt" step="0.1" min="0" placeholder="0.0" inputmode="decimal"></div>
+      <div class="fi"><div class="fi-left"><div class="fi-icon">🔋</div><div><div class="fi-label">Beladung</div><div class="fi-sub">Speicher geladen kWh</div></div></div><input type="number" id="q_bel" step="0.1" min="0" placeholder="0.0" inputmode="decimal"></div>
+      <div class="fi"><div class="fi-left"><div class="fi-icon">⚡</div><div><div class="fi-label">Entladung</div><div class="fi-sub">Speicher entladen kWh</div></div></div><input type="number" id="q_entl" step="0.1" min="0" placeholder="0.0" inputmode="decimal"></div>
+      <div class="fi"><div class="fi-left"><div class="fi-icon">🔼</div><div><div class="fi-label">Einspeisung</div><div class="fi-sub">Ins Netz kWh</div></div></div><input type="number" id="q_einsp" step="0.1" min="0" placeholder="0.0" inputmode="decimal"></div>
+      <div class="fi"><div class="fi-left"><div class="fi-icon">🔽</div><div><div class="fi-label">Bezug</div><div class="fi-sub">Vom Netz gekauft kWh</div></div></div><input type="number" id="q_bezug" step="0.1" min="0" placeholder="0.0" inputmode="decimal"></div>
+      <div class="fi"><div class="fi-left"><div class="fi-icon">📊</div><div><div class="fi-label">Verbrauch</div><div class="fi-sub">Gesamt kWh</div></div></div><input type="number" id="q_verbr" step="0.1" min="0" placeholder="0.0" inputmode="decimal"></div>
+
+      <button class="import-btn" onclick="manualImport()">✅ Übernehmen & Speichern</button>
+
+      <div class="result-box" id="resultBox">
+        <h4 id="resultTitle">✓ Gespeichert!</h4>
+        <div id="resultRows"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ DATEN TAB ══════════════ -->
+  <div id="tab-daten" style="display:none">
+    <div class="kpi-grid" id="kpiRow"></div>
+
+    <div class="sec">⚙️ Jahreseinstellungen</div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-h">Preise & Anlage</div>
+        <div class="sr"><span class="sl">Strompreis (€/kWh)</span><input type="number" class="inp" id="inp_sp" step="0.01" min="0" onchange="saveAndRecalc()"></div>
+        <div class="sr"><span class="sl">Einspeiseverg.</span><input type="number" class="inp" id="inp_ev" step="0.001" min="0" onchange="saveAndRecalc()"></div>
+        <div class="sr"><span class="sl">kWp</span><input type="number" class="inp" id="inp_kw" step="0.1" min="0" onchange="saveAndRecalc()"></div>
+      </div>
+      <div class="card">
+        <div class="card-h">Preis pro Monat</div>
+        <div id="monatPreise" style="display:grid;grid-template-columns:1fr 1fr;gap:3px;"></div>
+      </div>
+    </div>
+
+    <div class="sec">🏠 Verbrauch (kWh)</div>
+    <div class="tw"><table>
+      <thead><tr><th>Kategorie</th><th>Jan</th><th>Feb</th><th>Mär</th><th>Apr</th><th>Mai</th><th>Jun</th><th>Jul</th><th>Aug</th><th>Sep</th><th>Okt</th><th>Nov</th><th>Dez</th><th>∑</th></tr></thead>
+      <tbody id="vTab"></tbody>
+    </table></div>
+
+    <div class="sec">⚡ Erzeugung (kWh)</div>
+    <div class="tw"><table>
+      <thead><tr><th>Kategorie</th><th>Jan</th><th>Feb</th><th>Mär</th><th>Apr</th><th>Mai</th><th>Jun</th><th>Jul</th><th>Aug</th><th>Sep</th><th>Okt</th><th>Nov</th><th>Dez</th><th>∑</th></tr></thead>
+      <tbody id="eTab"></tbody>
+    </table></div>
+
+    <div class="sec">🔌 Verbraucher (kWh)</div>
+    <div class="tw"><table>
+      <thead><tr><th>Gerät</th><th>Jan</th><th>Feb</th><th>Mär</th><th>Apr</th><th>Mai</th><th>Jun</th><th>Jul</th><th>Aug</th><th>Sep</th><th>Okt</th><th>Nov</th><th>Dez</th><th>∑</th></tr></thead>
+      <tbody id="vcTab"></tbody>
+    </table></div>
+  </div>
+
+  <!-- ══════════════ GESAMT TAB ══════════════ -->
+  <div id="tab-gesamt" style="display:none">
+    <div class="kpi-grid" id="gKpi"></div>
+    <div class="sec">📈 Jahresübersicht</div>
+    <div class="tw"><table>
+      <thead><tr><th>Jahr</th><th>Verbr.</th><th>Erz.</th><th>Autarkie</th><th>Eigenverbr.</th><th>Erträge €</th><th>Strom €</th></tr></thead>
+      <tbody id="gTab"></tbody>
+    </table></div>
+    <div class="sec">📊 Verlauf</div>
+    <div class="card"><div class="ch-wrap"><canvas id="chGesamt"></canvas></div></div>
+  </div>
+
+  <!-- ══════════════ VERGLEICH TAB ══════════════ -->
+  <div id="tab-vergleich" style="display:none">
+    <div style="background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(34,211,238,.08));border:1px solid rgba(245,158,11,.2);border-radius:12px;padding:16px;margin-bottom:14px;text-align:center;">
+      <div style="font-size:20px;font-weight:800;margin-bottom:4px;">🏆 Jahresvergleich</div>
+      <div style="font-size:12px;color:var(--muted);">Welches Jahr war das stärkste?</div>
+    </div>
+    <div class="kpi-grid" id="bestKpi"></div>
+    <div class="sec">☀️ Erzeugung pro Jahr</div>
+    <div class="card"><div class="ch-wrap" style="height:230px"><canvas id="chErz"></canvas></div></div>
+    <div class="sec">🔋 Autarkie pro Jahr</div>
+    <div class="card"><div class="ch-wrap" style="height:200px"><canvas id="chAut"></canvas></div></div>
+    <div class="sec">💶 Erträge pro Jahr</div>
+    <div class="card"><div class="ch-wrap" style="height:200px"><canvas id="chErb"></canvas></div></div>
+    <div class="sec">📊 Rangliste</div>
+    <div class="tw"><table>
+      <thead><tr><th>Jahr</th><th>Erzeugung</th><th>Autarkie</th><th>Erträge €</th><th>Strom €</th></tr></thead>
+      <tbody id="vTab2"></tbody>
+    </table></div>
+  </div>
+
+  <!-- ══════════════ INVEST TAB ══════════════ -->
+  <div id="tab-invest" style="display:none">
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-h">💰 Investition</div>
+        <div class="sr"><span class="sl">Gesamt (€)</span><input type="number" class="inp" id="inp_inv" step="100" onchange="saveAndRecalc()"></div>
+        <div class="sr"><span class="sl">Speicher (€)</span><input type="number" class="inp" id="inp_si" step="100" onchange="saveAndRecalc()"></div>
+        <div id="invStats" style="margin-top:8px;"></div>
+      </div>
+      <div class="card">
+        <div class="card-h">📉 Amortisation</div>
+        <div id="amortStats"></div>
+        <div class="abar"><div class="afill" id="amortFill"></div></div>
+        <div style="font-size:11px;color:var(--muted);font-family:'JetBrains Mono'">Offen: <span id="offeneInvest" style="color:var(--accent)">—</span></div>
+      </div>
+    </div>
+    <div class="sec">📊 Timeline</div>
+    <div class="card"><div class="ch-wrap" style="height:230px"><canvas id="chAmort"></canvas></div></div>
+  </div>
+
+  <!-- ══════════════ EINSTELLUNGEN TAB ══════════════ -->
+  <div id="tab-einst" style="display:none">
+    <div class="card">
+      <div class="card-h">🔗 FEMS Adresse</div>
+      <div class="field">
+        <label>IP-Adresse</label>
+        <input type="text" class="tinp" id="femsIpInp" placeholder="z.B. 192.168.188.36">
+      </div>
+      <button class="btn btn-primary" onclick="saveFemsIp()">💾 Speichern</button>
+    </div>
+    <div class="card" style="margin-top:12px;">
+      <div class="card-h">💱 Strompreis für alle Monate</div>
+      <div class="sr">
+        <span class="sl">Preis (€/kWh)</span>
+        <input type="number" class="inp" id="allPrice" step="0.01" placeholder="0.41">
+      </div>
+      <button class="btn btn-primary" style="margin-top:10px;width:100%" onclick="setAllPrices()">✅ Alle Monate setzen</button>
+    </div>
+    <div class="card" style="margin-top:12px;">
+      <div class="card-h">🗑️ Daten zurücksetzen</div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Alle eingetragenen Werte löschen und mit den Original-Excel-Daten neu starten.</p>
+      <button class="btn" style="background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);color:var(--red);width:100%" onclick="resetData()">⚠️ Zurücksetzen</button>
+    </div>
+  </div>
+</main>
+
+<button class="fab" onclick="saveData()">💾 Speichern</button>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+// ═══════════════════════════════════════════════
+// CONSTANTS
+// ═══════════════════════════════════════════════
+const MO=['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+const MO_FULL=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+const YEARS=[2020,2021,2022,2023,2024,2025,2026,2027,2028,2029,2030,2031,2032,2033,2034,2035,2036,2037,2038,2039,2040,2041,2042,2043,2044,2045,2046,2047,2048,2049,2050,2051,2052,2053,2054,2055,2056,2057,2058,2059,2060,2061,2062,2063,2064,2065,2066,2067,2068,2069,2070,2071,2072,2073,2074,2075,2076,2077,2078,2079,2080,2081,2082,2083,2084,2085,2086,2087,2088,2089,2090,2091,2092,2093,2094,2095,2096,2097,2098,2099];
+
+// ═══════════════════════════════════════════════
+// PRE-FILLED DATA FROM EXCEL
+// ═══════════════════════════════════════════════
+const PREFILLED={
+  2023:{sp:.33,ev:.082,kwp:11.4,mp:[0,0,0,0,0,0,0,0,.33,.33,.33,.33],
+    V:{d:[0,0,0,0,0,0,0,0,310,204.5,45.5,32.7],e:[0,0,0,0,0,0,0,0,212.7,181.4,109.7,48.5],g:[0,0,0,0,0,0,0,0,40.4,241.4,398,527]},
+    E:{d:[0,0,0,0,0,0,0,0,310,204.5,45.5,32.7],a:[0,0,0,0,0,0,0,0,230.1,194.7,119.8,54.9],i:[0,0,0,0,0,0,0,0,397.9,128.6,8,7]},
+    vc:{'Fernseh WZ':[0,0,21,26,21,18,21,19,25,30,29,36],'Kühl/Gefrier':[0,0,20,22,29,34,41,34,33,29,23,20],'2 Computer WZ':[0,0,70,60,48,37,50,29,43,65,68,56],'Büro Ofen':[0,0,28,23,3,3,13,5,28,22,18,9],'Büro':[0,0,70,77,61,54,73,54,75,76,72,68],'Waschküche':[0,0,73,92,77,48,73,56,69,75,55,70],'Tesla':[0,0,205,88,263,251,240,136,375,219,204,318],'Outlander':[0,0,124,129,143,70,0,0,0,0,0,0]},
+    inv:0,si:0},
+  2024:{sp:.41,ev:.082,kwp:11.4,mp:[.33,.33,.33,.41,.41,.41,.41,.41,.41,.41,.41,.41],
+    V:{d:[188.1,121.2,208.3,0,0,0,0,0,431.1,222.7,26.9,70.5],e:[183,114.5,200.8,0,0,0,0,0,239.5,180.2,4.7,52.5],g:[542.4,486.1,341,0,0,0,0,0,244.8,377.4,61.9,582.1]},
+    E:{d:[188.1,121.2,208.3,0,0,0,0,0,431.1,222.7,26.9,70.5],a:[193.8,126.8,209.9,0,0,0,0,0,253.3,197.2,14.1,57.2],i:[33.3,51.5,173.5,0,0,0,0,0,195.1,49.4,4.7,4.4]},
+    vc:{'Skoda':[0,0,0,0,0,231.1,190.8,115.1,252,48.3,137,199.3],'Twingo':[0,0,0,0,0,36.9,51,70.5,48.3,66.8,38.9,45.7]},
+    inv:0,si:0},
+  2025:{sp:.41,ev:.082,kwp:11.4,mp:[.41,.41,.41,.41,.41,.41,.41,.41,.41,.41,.41,.41],
+    V:{d:[127.7,225.4,469.4,600.3,702.2,800.6,693.1,744.9,366.2,243,136.2,114.6],e:[102.2,157.5,230.1,228,221.7,235.5,256.6,228.4,209.1,166.4,93.4,80.2],g:[497.1,312,148.9,45.3,16.8,74.3,55.1,24.6,156.9,333.2,527,555.8]},
+    E:{d:[127.7,225.4,469.4,600.3,702.2,800.6,693.1,744.9,366.2,243,136.2,114.6],a:[116.8,166.8,243.5,238.3,223.6,249,266.3,236,216.9,173.4,102.1,89.5],i:[23,71.8,339.6,594.6,672.1,537.3,356.3,555.6,194.2,97.9,35.7,13.2]},
+    vc:{'Skoda':[124,131.3,89.9,98.2,98.8,103.6,89.5,71.3,67.3,46.5,85.8,93.9],'Twingo':[44.7,21.9,38.6,45.7,39.7,27.4,61.1,41,71.3,72.6,88.6,33]},
+    inv:0,si:0},
+  2026:{sp:.41,ev:.082,kwp:11.4,mp:[.41,.41,.41,.41,.41,.41,.41,.41,.41,.41,.41,.41],
+    V:{d:[126.2,153.1,460.7,0,0,0,0,0,0,0,0,0],e:[85.4,79.9,258.1,0,0,0,0,0,0,0,0,0],g:[592.9,523,178.8,0,0,0,0,0,0,0,0,0]},
+    E:{d:[126.2,153.1,460.7,0,0,0,0,0,0,0,0,0],a:[96,89.3,272.6,0,0,0,0,0,0,0,0,0],i:[19,35.9,316.5,0,0,0,0,0,0,0,0,0]},
+    vc:{'Skoda':[80.3,95.5,0,0,0,0,0,0,0,0,0,0],'Twingo':[90,92.4,0,0,0,0,0,0,0,0,0,0]},
+    inv:0,si:0}
+};
+
+function makeEmpty(){return{sp:.41,ev:.082,kwp:11.4,mp:Array(12).fill(.41),V:{d:Array(12).fill(0),e:Array(12).fill(0),g:Array(12).fill(0)},E:{d:Array(12).fill(0),a:Array(12).fill(0),i:Array(12).fill(0)},vc:{Skoda:Array(12).fill(0),Twingo:Array(12).fill(0)},inv:18146.89,si:7393.88};}
+
+// ═══════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════
+let selYear=2026, D={}, femsIp='', CH={};
+let ssFiles=[], ssResults=[];
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+function init(){
+  // Load data
+  const saved=localStorage.getItem('solarData2');
+  if(saved){try{D=JSON.parse(saved);}catch(e){D={};}}
+  YEARS.forEach(y=>{if(!D[y])D[y]=PREFILLED[y]?JSON.parse(JSON.stringify(PREFILLED[y])):makeEmpty();});
+
+  // Load FEMS IP
+  femsIp=localStorage.getItem('femsIp')||'';
+  if(femsIp){
+    document.getElementById('femsIpInp').value=femsIp;
+    updateFemsLink();
+  }
+
+  // Build UI
+  buildYearBar();
+  buildSelects();
+  selectYear(selYear);
+}
+
+// ═══════════════════════════════════════════════
+// YEAR BAR
+// ═══════════════════════════════════════════════
+function buildYearBar(){
+  const bar=document.getElementById('ybar');
+  bar.innerHTML='';
+  YEARS.forEach(y=>{
+    const b=document.createElement('button');
+    b.className='ybtn'+(y===selYear?' active':'');
+    const d=D[y];
+    if(d&&(sum(d.V?.d||[])+sum(d.E?.d||[]))>0)b.classList.add('has-data');
+    b.textContent=y;
+    b.onclick=()=>selectYear(y);
+    bar.appendChild(b);
+  });
+}
+
+function selectYear(y){
+  selYear=parseInt(y);
+  document.querySelectorAll('.ybtn').forEach(b=>b.classList.toggle('active',parseInt(b.textContent)===selYear));
+  const qs=document.getElementById('qYear');
+  if(qs)qs.value=selYear;
+  renderDaten();
+}
+
+// ═══════════════════════════════════════════════
+// BUILD SELECTS
+// ═══════════════════════════════════════════════
+function buildSelects(){
+  const ys=document.getElementById('qYear');
+  const ms=document.getElementById('qMonth');
+  if(!ys||!ms)return;
+  YEARS.forEach(y=>{const o=document.createElement('option');o.value=y;o.textContent=y;if(y===selYear)o.selected=true;ys.appendChild(o);});
+  MO_FULL.forEach((m,i)=>{const o=document.createElement('option');o.value=i;o.textContent=m;if(i===new Date().getMonth())o.selected=true;ms.appendChild(o);});
+  ys.onchange=()=>selectYear(parseInt(ys.value));
+}
+
+// ═══════════════════════════════════════════════
+// RENDER DATEN TAB
+// ═══════════════════════════════════════════════
+function renderDaten(){
+  const d=D[selYear];
+  if(!d)return;
+
+  // Set inputs
+  const sp=document.getElementById('inp_sp');
+  const ev=document.getElementById('inp_ev');
+  const kw=document.getElementById('inp_kw');
+  const inv=document.getElementById('inp_inv');
+  const si=document.getElementById('inp_si');
+  if(sp)sp.value=d.sp||'';
+  if(ev)ev.value=d.ev||'';
+  if(kw)kw.value=d.kwp||'';
+  if(inv)inv.value=d.inv||'';
+  if(si)si.value=d.si||'';
+
+  // Monat Preise
+  const mp=document.getElementById('monatPreise');
+  if(mp)mp.innerHTML=MO.map((m,i)=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:2px 0;font-size:11px;">
+      <span style="color:var(--muted);font-family:'JetBrains Mono'">${m}</span>
+      <input type="number" step="0.01" min="0" value="${d.mp?.[i]||''}" onchange="updMP(${i},this.value)"
+        style="background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.25);color:var(--accent);font-family:'JetBrains Mono';font-size:10px;width:58px;padding:2px 4px;border-radius:3px;text-align:right;outline:none;-webkit-appearance:none;">
+    </div>`).join('');
+
+  renderKPIs(d,'kpiRow');
+  renderTables(d);
+}
+
+function renderKPIs(d,id){
+  const el=document.getElementById(id);
+  if(!el)return;
+  const v=stats(d);
+  el.innerHTML=[
+    {l:'Verbrauch',v:f0(v.vGes),u:'kWh',c:'#64748b'},
+    {l:'Erzeugung',v:f0(v.eGes),u:'kWh',c:'#fbbf24'},
+    {l:'Autarkie',v:pct(v.aut),u:'Eigenversorgung',c:'#22d3ee'},
+    {l:'Eigenverbr.',v:pct(v.evq),u:'Nutzungsquote',c:'#34d399'},
+    {l:'Erträge',v:'€'+f2(v.erb),u:'finanziell',c:'#f59e0b'},
+    {l:'Stromkauf',v:'€'+f2(v.strom),u:'Kosten',c:'#f87171'},
+  ].map(k=>`<div class="kpi" style="--kc:${k.c}"><div class="kpi-l">${k.l}</div><div class="kpi-v">${k.v}</div><div class="kpi-u">${k.u}</div></div>`).join('');
+}
+
+function renderTables(d){
+  // Verbrauch
+  const vr=[{l:'Direkt',k:'d',c:'pos'},{l:'Entladen',k:'e',c:'pos'},{l:'Gekauft',k:'g',c:'neg'}];
+  let vH=vr.map(r=>{
+    const vals=d.V[r.k]||Array(12).fill(0);
+    return`<tr><td>${r.l}</td>${vals.map((v,i)=>`<td><input type="number" step="0.1" value="${v||''}" onchange="updV('${r.k}',${i},this.value)"></td>`).join('')}<td class="tot">${f0(sum(vals))}</td></tr>`;
+  }).join('');
+  const vg=Array(12).fill(0).map((_,i)=>(d.V.d?.[i]||0)+(d.V.e?.[i]||0)+(d.V.g?.[i]||0));
+  vH+=`<tr style="background:rgba(245,158,11,.04)"><td style="color:var(--accent);font-weight:700">Gesamt</td>${vg.map(v=>`<td class="tot">${v?f0(v):''}</td>`).join('')}<td class="tot">${f0(sum(vg))}</td></tr>`;
+  const vt=document.getElementById('vTab');if(vt)vt.innerHTML=vH;
+
+  // Erzeugung
+  const er=[{l:'Direkt',k:'d'},{l:'Aufladen',k:'a'},{l:'Eingespeist',k:'i'}];
+  let eH=er.map(r=>{
+    const vals=d.E[r.k]||Array(12).fill(0);
+    return`<tr><td>${r.l}</td>${vals.map((v,i)=>`<td><input type="number" step="0.1" value="${v||''}" onchange="updE('${r.k}',${i},this.value)"></td>`).join('')}<td class="tot">${f0(sum(vals))}</td></tr>`;
+  }).join('');
+  const eg=Array(12).fill(0).map((_,i)=>(d.E.d?.[i]||0)+(d.E.a?.[i]||0)+(d.E.i?.[i]||0));
+  eH+=`<tr style="background:rgba(245,158,11,.04)"><td style="color:var(--accent);font-weight:700">Gesamt</td>${eg.map(v=>`<td class="tot">${v?f0(v):''}</td>`).join('')}<td class="tot">${f0(sum(eg))}</td></tr>`;
+  const et=document.getElementById('eTab');if(et)et.innerHTML=eH;
+
+  // Verbraucher
+  const vc=d.vc||{};
+  let vcH=Object.keys(vc).map(name=>{
+    const vals=vc[name]||Array(12).fill(0);
+    const sn=name.replace(/'/g,"\\'");
+    return`<tr><td>${name}</td>${vals.map((v,i)=>`<td><input type="number" step="0.1" value="${v||''}" onchange="updVC('${sn}',${i},this.value)"></td>`).join('')}<td class="tot">${f0(sum(vals))}</td></tr>`;
+  }).join('');
+  vcH+=`<tr><td colspan="14" style="padding:7px;text-align:center"><button onclick="addVC()" style="background:rgba(34,211,238,.08);border:1px dashed rgba(34,211,238,.3);color:var(--a2);padding:5px 14px;border-radius:6px;font-size:11px;cursor:pointer;">+ Gerät hinzufügen</button></td></tr>`;
+  const vct=document.getElementById('vcTab');if(vct)vct.innerHTML=vcH;
+}
+
+// ═══════════════════════════════════════════════
+// GESAMT
+// ═══════════════════════════════════════════════
+function renderGesamt(){
+  let html='',cumE=0;
+  YEARS.forEach(y=>{
+    const d=D[y];if(!d)return;
+    const v=stats(d);cumE+=v.erb;
+    const cur=y===selYear;
+    html+=`<tr${cur?' style="background:rgba(245,158,11,.05)"':''}>
+      <td>${y}${cur?' ●':''}</td>
+      <td>${v.vGes?f0(v.vGes):'—'}</td>
+      <td>${v.eGes?f0(v.eGes):'—'}</td>
+      <td class="${v.aut>.7?'pos':v.aut>.4?'':'neg'}">${v.aut?pct(v.aut):'—'}</td>
+      <td>${v.evq?pct(v.evq):'—'}</td>
+      <td class="pos">${v.erb?'€'+f2(v.erb):'—'}</td>
+      <td class="neg">${v.strom?'€'+f2(v.strom):'—'}</td>
+    </tr>`;
+  });
+  const gt=document.getElementById('gTab');if(gt)gt.innerHTML=html;
+  const allV=stats(D[selYear]);
+  const gk=document.getElementById('gKpi');
+  if(gk)gk.innerHTML=[
+    {l:'Kum. Erträge',v:'€'+f2(cumE),u:'seit 2023',c:'#fbbf24'},
+    {l:'Akt. Autarkie',v:pct(allV.aut),u:selYear+'',c:'#22d3ee'},
+    {l:'Akt. Erträge',v:'€'+f2(allV.erb),u:selYear+'',c:'#34d399'},
+  ].map(k=>`<div class="kpi" style="--kc:${k.c}"><div class="kpi-l">${k.l}</div><div class="kpi-v">${k.v}</div><div class="kpi-u">${k.u}</div></div>`).join('');
+
+  // Chart
+  const labels=[],erz=[],aut=[],erb=[];
+  YEARS.forEach(y=>{const d=D[y];if(!d)return;const v=stats(d);if(v.eGes>0){labels.push(y);erz.push(v.eGes.toFixed(0));aut.push((v.aut*100).toFixed(1));erb.push(v.erb.toFixed(0));}});
+  buildChart('chGesamt',{type:'bar',data:{labels,datasets:[
+    {label:'Erzeugung kWh',data:erz,backgroundColor:'rgba(251,191,36,.6)',borderColor:'#fbbf24',borderRadius:4,yAxisID:'y'},
+    {label:'Erträge €',data:erb,backgroundColor:'rgba(52,211,153,.6)',borderColor:'#34d399',borderRadius:4,yAxisID:'y'},
+    {label:'Autarkie %',data:aut,type:'line',borderColor:'#22d3ee',tension:.4,borderWidth:2,pointBackgroundColor:'#22d3ee',yAxisID:'y2'},
+  ]},options:chartOpts(true)});
+}
+
+// ═══════════════════════════════════════════════
+// VERGLEICH
+// ═══════════════════════════════════════════════
+function renderVergleich(){
+  const years=[],erz=[],aut=[],erb=[],strom=[];
+  let bEY='—',bEV=0,bAY='—',bAV=0,bRY='—',bRV=0;
+  YEARS.forEach(y=>{
+    const d=D[y];if(!d)return;
+    const v=stats(d);if(v.eGes===0)return;
+    years.push(y);
+    erz.push(parseFloat(v.eGes.toFixed(1)));
+    aut.push(parseFloat((v.aut*100).toFixed(1)));
+    erb.push(parseFloat(v.erb.toFixed(2)));
+    strom.push(parseFloat(v.strom.toFixed(2)));
+    if(v.eGes>bEV){bEV=v.eGes;bEY=y;}
+    if(v.aut>bAV){bAV=v.aut;bAY=y;}
+    if(v.erb>bRV){bRV=v.erb;bRY=y;}
+  });
+
+  const bk=document.getElementById('bestKpi');
+  if(bk)bk.innerHTML=[
+    {l:'🏆 Meiste Erzeugung',v:bEY,u:f0(bEV)+' kWh',c:'#fbbf24'},
+    {l:'🔋 Beste Autarkie',v:bAY,u:(bAV*100).toFixed(1)+' %',c:'#22d3ee'},
+    {l:'💶 Meiste Erträge',v:bRY,u:'€'+f2(bRV),c:'#34d399'},
+  ].map(k=>`<div class="kpi" style="--kc:${k.c}"><div class="kpi-l">${k.l}</div><div class="kpi-v" style="font-size:22px;font-weight:800">${k.v}</div><div class="kpi-u">${k.u}</div></div>`).join('');
+
+  // Erzeugung chart — highlight best year
+  const maxErz=Math.max(...erz);
+  buildChart('chErz',{type:'bar',data:{labels:years,datasets:[{
+    label:'Erzeugung kWh',data:erz,
+    backgroundColor:erz.map(v=>v===maxErz?'rgba(251,191,36,.9)':'rgba(251,191,36,.4)'),
+    borderColor:erz.map(v=>v===maxErz?'#fff':'#fbbf24'),
+    borderWidth:erz.map(v=>v===maxErz?2:1),
+    borderRadius:6,
+  }]},options:chartOpts()});
+
+  // Autarkie chart
+  const maxAut=Math.max(...aut);
+  buildChart('chAut',{type:'bar',data:{labels:years,datasets:[{
+    label:'Autarkie %',data:aut,
+    backgroundColor:aut.map(v=>v===maxAut?'rgba(34,211,238,.9)':'rgba(34,211,238,.4)'),
+    borderColor:aut.map(v=>v===maxAut?'#fff':'#22d3ee'),
+    borderWidth:aut.map(v=>v===maxAut?2:1),
+    borderRadius:6,
+  }]},options:{...chartOpts(),scales:{x:{grid:{color:'rgba(30,48,80,.4)'},ticks:{color:'#64748b',font:{family:'JetBrains Mono',size:10}}},y:{grid:{color:'rgba(30,48,80,.4)'},ticks:{color:'#64748b',font:{family:'JetBrains Mono',size:10},callback:v=>v+'%'}}}}});
+
+  // Erträge chart
+  const maxErb=Math.max(...erb);
+  buildChart('chErb',{type:'bar',data:{labels:years,datasets:[{
+    label:'Erträge €',data:erb,
+    backgroundColor:erb.map(v=>v===maxErb?'rgba(52,211,153,.9)':'rgba(52,211,153,.4)'),
+    borderColor:erb.map(v=>v===maxErb?'#fff':'#34d399'),
+    borderWidth:erb.map(v=>v===maxErb?2:1),
+    borderRadius:6,
+  }]},options:{...chartOpts(),scales:{x:{grid:{color:'rgba(30,48,80,.4)'},ticks:{color:'#64748b',font:{family:'JetBrains Mono',size:10}}},y:{grid:{color:'rgba(30,48,80,.4)'},ticks:{color:'#64748b',font:{family:'JetBrains Mono',size:10},callback:v=>'€'+v}}}}});
+
+  // Table sorted by Erzeugung
+  const sorted=[...years.map((y,i)=>({y,erz:erz[i],aut:aut[i],erb:erb[i],strom:strom[i]}))].sort((a,b)=>b.erz-a.erz);
+  const vt2=document.getElementById('vTab2');
+  if(vt2)vt2.innerHTML=sorted.map((r,i)=>`<tr${i===0?' style="background:rgba(251,191,36,.06)"':''}>
+    <td>${r.y}${i===0?' 🏆':''}</td>
+    <td class="${i===0?'pos':''}">${f0(r.erz)} kWh</td>
+    <td>${r.aut} %</td>
+    <td class="pos">${r.erb?'€'+f2(r.erb):'—'}</td>
+    <td class="neg">${r.strom?'€'+f2(r.strom):'—'}</td>
+  </tr>`).join('');
+}
+
+// ═══════════════════════════════════════════════
+// INVESTITION
+// ═══════════════════════════════════════════════
+function renderInvest(){
+  const d=D[selYear];if(!d)return;
+
+  // Investment base from selected year
+  const base=d.inv||0;
+
+  // Sum all real earnings since 2023
+  let cumE=0;
+  for(let y=2023;y<=2099;y++){if(D[y])cumE+=stats(D[y]).erb;}
+
+  // Average: use only complete years (months with data ≥ 10)
+  let fullErb=0,fullCount=0;
+  for(let y=2023;y<=2099;y++){
+    if(!D[y])continue;
+    const months=D[y].V?.d?.filter(v=>v>0).length||0;
+    if(months>=10){fullErb+=stats(D[y]).erb;fullCount++;}
+  }
+  // Best average: full years first, else extrapolate best partial year to 12 months
+  let avgErb=0;
+  if(fullCount>0){
+    avgErb=fullErb/fullCount;
+  } else {
+    // Extrapolate: take best partial year, scale to 12 months
+    let bestPartialErb=0,bestMonths=0;
+    for(let y=2023;y<=2099;y++){
+      if(!D[y])continue;
+      const months=D[y].V?.d?.filter(v=>v>0).length||0;
+      const erb=stats(D[y]).erb;
+      if(months>0&&erb>0){
+        const annualised=erb/months*12;
+        if(annualised>bestPartialErb){bestPartialErb=annualised;bestMonths=months;}
+      }
+    }
+    avgErb=bestPartialErb||1000;
+  }
+
+  const offen=Math.max(0,base-cumE);
+  const pd=base>0?Math.min(1,cumE/base):0;
+
+  // Calculate exact amortisation year
+  let amortYear=null,proj=cumE;
+  const curYear=new Date().getFullYear();
+  for(let y=curYear+1;y<=2099;y++){
+    proj+=avgErb;
+    if(proj>=base){amortYear=y;break;}
+  }
+  const restJahre=offen>0&&avgErb>0?Math.ceil(offen/avgErb):0;
+  const amortText=offen<=0
+    ?'✅ Bereits amortisiert'
+    :amortYear
+      ?`ca. ${amortYear} (in ~${restJahre} Jahren)`
+      :'—';
+
+  document.getElementById('invStats').innerHTML=`
+    <div class="sr"><span class="sl">Ø Jahresertrag</span><span class="sv pos">€${f2(avgErb)}</span></div>
+    <div class="sr"><span class="sl">Kum. Erträge seit 2023</span><span class="sv pos">€${f2(cumE)}</span></div>
+    <div class="sr"><span class="sl">Anteil abgezahlt</span><span class="sv" style="color:var(--accent)">${base>0?pct(cumE/base):'—'}</span></div>`;
+  document.getElementById('offeneInvest').textContent='€'+f2(offen);
+  document.getElementById('amortFill').style.width=(pd*100)+'%';
+  document.getElementById('amortStats').innerHTML=`
+    <div class="sr"><span class="sl">Abbezahlt</span><span class="sv pos">€${f2(cumE)}</span></div>
+    <div class="sr"><span class="sl">Noch offen</span><span class="sv neg">€${f2(offen)}</span></div>
+    <div class="sr"><span class="sl">Amortisiert voraussichtlich</span><span class="sv" style="color:var(--a2);font-size:12px">${amortText}</span></div>`;
+
+  // Calculate average yearly earnings for projection
+  let totalErb=0,countErb=0;
+  for(let y=2023;y<=2026;y++){if(D[y]){const yv=stats(D[y]);if(yv.erb>0){totalErb+=yv.erb;countErb++;}}}
+  const avgYearlyErb=countErb>0?totalErb/countErb:500;
+
+  let cum2=0;const labels=[],inv=[],ertr=[];
+  // Real data years
+  for(let y=2023;y<=2099;y++){
+    if(D[y]){const yv=stats(D[y]);if(yv.erb>0){cum2+=yv.erb;labels.push(y);inv.push(base.toFixed(0));ertr.push(Math.min(cum2,base).toFixed(0));if(cum2>=base)break;}}
+    else if(cum2<base&&labels.length>0){
+      // Project future years with average
+      cum2+=avgYearlyErb;
+      labels.push(y);inv.push(base.toFixed(0));ertr.push(Math.min(cum2,base).toFixed(0));
+      if(cum2>=base)break;
+    }
+  }
+  buildChart('chAmort',{type:'line',data:{labels,datasets:[
+    {label:'Investition €',data:inv,borderColor:'#f87171',tension:.1,borderDash:[5,5],fill:false,pointRadius:2},
+    {label:'Kum. Erträge €',data:ertr,borderColor:'#34d399',backgroundColor:'rgba(52,211,153,.12)',tension:.4,fill:true,pointRadius:2},
+  ]},options:{...chartOpts(),scales:{x:{grid:{color:'rgba(30,48,80,.4)'},ticks:{color:'#64748b',font:{family:'JetBrains Mono',size:10}}},y:{grid:{color:'rgba(30,48,80,.4)'},ticks:{color:'#64748b',font:{family:'JetBrains Mono',size:10},callback:v=>'€'+v}}}}});
+}
+
+// ═══════════════════════════════════════════════
+// SCREENSHOT OCR
+// ═══════════════════════════════════════════════
+function addScreenshots(input){
+  if(!input.files||input.files.length===0)return;
+  const files=Array.from(input.files);
+  files.forEach(file=>{
+    ssFiles.push(file);
+    const idx=ssFiles.length-1;
+    addSSItem(file,idx);
+  });
+  document.getElementById('processBtn').style.display='flex';
+  input.value=''; // reset so same file can be added again
+}
+
+function addSSItem(file,idx){
+  const queue=document.getElementById('ssQueue');
+  const div=document.createElement('div');
+  div.className='ss-item';
+  div.id='ss-'+idx;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    div.innerHTML=`
+      <img class="ss-thumb" src="${e.target.result}">
+      <div class="ss-info">
+        <div class="ss-name">${file.name.length>25?file.name.substring(0,22)+'...':file.name}</div>
+        <div class="ss-status waiting" id="ss-status-${idx}">⏳ Wartend</div>
+      </div>
+      <button onclick="removeSSItem(${idx})" style="background:none;border:none;color:var(--red);font-size:16px;cursor:pointer;padding:4px;">✕</button>`;
+    queue.appendChild(div);
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeSSItem(idx){
+  ssFiles[idx]=null;
+  const el=document.getElementById('ss-'+idx);
+  if(el)el.remove();
+  if(ssFiles.every(f=>f===null)){
+    ssFiles=[];
+    document.getElementById('processBtn').style.display='none';
+  }
+}
+
+async function processAllScreenshots(){
+  const btn=document.getElementById('processBtn');
+  btn.disabled=true;
+  btn.innerHTML='⏳ Wird ausgelesen…';
+
+  let successCount=0;
+  for(let i=0;i<ssFiles.length;i++){
+    const file=ssFiles[i];
+    if(!file)continue;
+    const statusEl=document.getElementById('ss-status-'+i);
+    if(statusEl){statusEl.className='ss-status loading';statusEl.textContent='🤖 Claude liest aus…';}
+    try{
+      const result=await ocrScreenshot(file);
+      if(result){
+        applyOcrResult(result,i);
+        if(statusEl){
+          statusEl.className='ss-status done';
+          const mname=result.monat||'';
+          const yname=result.jahr||'';
+          statusEl.textContent=`✓ ${mname} ${yname} gespeichert!`;
+        }
+        successCount++;
+      } else {
+        if(statusEl){statusEl.className='ss-status error';statusEl.textContent='✗ Nicht erkannt';}
+      }
+    } catch(e){
+      if(statusEl){statusEl.className='ss-status error';statusEl.textContent='✗ Fehler bei Erkennung';}
+    }
+  }
+
+  btn.disabled=false;
+  btn.innerHTML=`✅ Fertig! ${successCount} von ${ssFiles.filter(f=>f!==null).length} erkannt`;
+  if(successCount>0){
+    localStorage.setItem('solarData2',JSON.stringify(D));
+    buildYearBar();
+    renderDaten();
+    showToast(`${successCount} Monat(e) importiert!`,'ok');
+  }
+}
+
+async function ocrScreenshot(file){
+  const base64=await new Promise((res,rej)=>{
+    const r=new FileReader();
+    r.onload=()=>res(r.result.split(',')[1]);
+    r.onerror=rej;
+    r.readAsDataURL(file);
+  });
+
+  const resp=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',
+      max_tokens:500,
+      messages:[{role:'user',content:[
+        {type:'image',source:{type:'base64',media_type:file.type,data:base64}},
+        {type:'text',text:'FENECON FEMS Energiemonitor Screenshot. Gib NUR dieses JSON zurück, kein anderer Text:\n{"monat":"Monatsname auf Deutsch","jahr":Jahreszahl,"erzeugung":Zahl,"direktverbrauch":Zahl,"beladung":Zahl,"entladung":Zahl,"einspeisung":Zahl,"bezug":Zahl,"verbrauch":Zahl}\nDezimaltrennzeichen: Punkt. Fehlende Werte: 0. Wenn Jahresdaten (kein Monat): monat=null.'}
+      ]}]
+    })
+  });
+
+  const data=await resp.json();
+  const text=(data.content?.[0]?.text||'').replace(/```json|```/g,'').trim();
+  return JSON.parse(text);
+}
+
+function applyOcrResult(r,ssIdx){
+  // Determine year and month
+  let year=r.jahr||selYear;
+  if(!YEARS.includes(year))year=selYear;
+
+  let month=-1;
+  if(r.monat){
+    const mn=['januar','februar','märz','april','mai','juni','juli','august','september','oktober','november','dezember'];
+    month=mn.findIndex(m=>r.monat.toLowerCase().includes(m));
+  }
+
+  if(month>=0){
+    // Monthly data
+    const d=D[year];
+    if(!d)return;
+    const direkt=r.direktverbrauch||0;
+    d.V.d[month]=direkt;
+    d.V.e[month]=r.entladung||0;
+    d.V.g[month]=r.bezug||0;
+    d.E.d[month]=direkt;
+    d.E.a[month]=r.beladung||0;
+    d.E.i[month]=r.einspeisung||0;
+  } else if(r.monat===null||r.monat===undefined){
+    // Yearly data — distribute is not ideal, just show toast
+    showToast('Jahresansicht erkannt — bitte Monatsansicht verwenden','err');
+  }
+}
+
+// ═══════════════════════════════════════════════
+// MANUAL IMPORT
+// ═══════════════════════════════════════════════
+function manualImport(){
+  const year=parseInt(document.getElementById('qYear').value);
+  const month=parseInt(document.getElementById('qMonth').value);
+  const erz=pf('q_erz'),direkt=pf('q_direkt'),bel=pf('q_bel');
+  const entl=pf('q_entl'),einsp=pf('q_einsp'),bezug=pf('q_bezug'),verbr=pf('q_verbr');
+
+  if(erz===0&&direkt===0&&bezug===0){showToast('Bitte Werte eingeben!','err');return;}
+
+  const d=D[year];
+  d.E.d[month]=direkt; d.E.a[month]=bel; d.E.i[month]=einsp;
+  d.V.d[month]=direkt; d.V.e[month]=entl; d.V.g[month]=bezug;
+
+  localStorage.setItem('solarData2',JSON.stringify(D));
+  buildYearBar();
+  if(year===selYear)renderDaten();
+
+  const rb=document.getElementById('resultBox');
+  document.getElementById('resultTitle').textContent=`✓ ${MO_FULL[month]} ${year} gespeichert!`;
+  document.getElementById('resultRows').innerHTML=[
+    ['Erzeugung',erz+' kWh'],['Direktverbrauch',direkt+' kWh'],
+    ['Beladung',bel+' kWh'],['Entladung',entl+' kWh'],
+    ['Einspeisung',einsp+' kWh'],['Bezug',bezug+' kWh'],
+  ].map(r=>`<div class="rrow"><span>${r[0]}</span><span>${r[1]}</span></div>`).join('');
+  rb.classList.add('show');
+  showToast(`${MO[month]} ${year} übernommen!`,'ok');
+  setTimeout(()=>['q_erz','q_direkt','q_bel','q_entl','q_einsp','q_bezug','q_verbr'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';}),1500);
+}
+
+// ═══════════════════════════════════════════════
+// FEMS
+// ═══════════════════════════════════════════════
+function updateFemsLink(){
+  const el=document.getElementById('femsLink');
+  if(!el)return;
+  if(femsIp){el.href=`http://${femsIp}`;el.textContent=`🔗 FEMS öffnen → ${femsIp}`;}
+  else{el.href='#';el.textContent='🔗 FEMS öffnen (IP in Einstellungen eintragen)';}
+}
+function openFems(e){e.preventDefault();if(femsIp)window.open(`http://${femsIp}`,'_blank');else showToast('FEMS-IP in ⚙️ Einstellungen eintragen!','err');}
+function saveFemsIp(){femsIp=document.getElementById('femsIpInp').value.trim();localStorage.setItem('femsIp',femsIp);updateFemsLink();showToast('Gespeichert!','ok');}
+
+// ═══════════════════════════════════════════════
+// TABS
+// ═══════════════════════════════════════════════
+function showTab(name,btn){
+  ['import','daten','gesamt','vergleich','invest','einst'].forEach(t=>{
+    const el=document.getElementById('tab-'+t);
+    if(el)el.style.display=t===name?'':'none';
+  });
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  if(name==='daten')renderDaten();
+  if(name==='gesamt')renderGesamt();
+  if(name==='vergleich')renderVergleich();
+  if(name==='invest'){renderDaten();renderInvest();}
+}
+
+// ═══════════════════════════════════════════════
+// UPDATERS
+// ═══════════════════════════════════════════════
+function updV(k,i,v){D[selYear].V[k][i]=parseFloat(v)||0;saveAndRecalc();}
+function updE(k,i,v){D[selYear].E[k][i]=parseFloat(v)||0;saveAndRecalc();}
+function updVC(n,i,v){if(!D[selYear].vc[n])D[selYear].vc[n]=Array(12).fill(0);D[selYear].vc[n][i]=parseFloat(v)||0;saveAndRecalc();}
+function updMP(i,v){D[selYear].mp[i]=parseFloat(v)||0;saveAndRecalc();}
+function addVC(){const n=prompt('Name des Geräts:');if(!n)return;D[selYear].vc[n]=Array(12).fill(0);renderTables(D[selYear]);}
+
+function saveAndRecalc(){
+  const d=D[selYear];
+  d.sp=pf('inp_sp');d.ev=pf('inp_ev');d.kwp=pf('inp_kw');d.inv=pf('inp_inv');d.si=pf('inp_si');
+  renderKPIs(d,'kpiRow');
+}
+
+function saveData(){
+  try{
+    const d=D[selYear];
+    d.sp=pf('inp_sp');d.ev=pf('inp_ev');d.kwp=pf('inp_kw');d.inv=pf('inp_inv');d.si=pf('inp_si');
+  }catch(e){}
+  localStorage.setItem('solarData2',JSON.stringify(D));
+  showToast('✓ Gespeichert!','ok');
+}
+
+function setAllPrices(){
+  const p=pf('allPrice');if(!p){showToast('Preis eingeben!','err');return;}
+  D[selYear].mp=Array(12).fill(p);D[selYear].sp=p;
+  renderDaten();showToast(`Alle Monate: €${p}/kWh`,'ok');
+}
+
+function resetData(){
+  if(!confirm('Wirklich alle Daten zurücksetzen?'))return;
+  localStorage.removeItem('solarData2');
+  D={};YEARS.forEach(y=>{D[y]=PREFILLED[y]?JSON.parse(JSON.stringify(PREFILLED[y])):makeEmpty();});
+  buildYearBar();renderDaten();showToast('Zurückgesetzt!','ok');
+}
+
+// ═══════════════════════════════════════════════
+// STATS
+// ═══════════════════════════════════════════════
+function stats(d){
+  const vD=sum(d.V?.d||[]),vE=sum(d.V?.e||[]),vG=sum(d.V?.g||[]);
+  const vGes=vD+vE+vG;
+  const eD=sum(d.E?.d||[]),eA=sum(d.E?.a||[]),eI=sum(d.E?.i||[]);
+  const eGes=eD+eA+eI;
+  const aut=vGes>0?(vD+vE)/vGes:0;
+  const evq=eGes>0?(eD+eA)/eGes:0;
+  let ertD=0,ertE=0;const mp=d.mp||[];
+  for(let i=0;i<12;i++){const p=mp[i]||d.sp||0;ertD+=(d.V?.d?.[i]||0)*p;ertE+=(d.V?.e?.[i]||0)*p;}
+  const ertI=eI*(d.ev||0),erb=ertD+ertE+ertI;
+  let strom=0;for(let i=0;i<12;i++){const p=mp[i]||d.sp||0;strom+=(d.V?.g?.[i]||0)*p;}
+  return{vGes,eGes,aut,evq,erb,strom};
+}
+
+// ═══════════════════════════════════════════════
+// CHARTS
+// ═══════════════════════════════════════════════
+function chartOpts(dual=false){
+  const base={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a3b8',font:{family:'JetBrains Mono',size:10}}}},scales:{x:{grid:{color:'rgba(30,48,80,.4)'},ticks:{color:'#64748b',font:{family:'JetBrains Mono',size:10}}},y:{grid:{color:'rgba(30,48,80,.4)'},ticks:{color:'#64748b',font:{family:'JetBrains Mono',size:10}}}}};
+  if(dual)base.scales.y2={position:'right',grid:{drawOnChartArea:false},ticks:{color:'#22d3ee',font:{family:'JetBrains Mono',size:10},callback:v=>v+'%'}};
+  return base;
+}
+
+function buildChart(id,config){
+  const ctx=document.getElementById(id);if(!ctx)return;
+  if(CH[id])CH[id].destroy();
+  CH[id]=new Chart(ctx,config);
+}
+
+// ═══════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════
+function sum(a){return(a||[]).reduce((x,b)=>x+(parseFloat(b)||0),0);}
+function f0(n){return n?n.toLocaleString('de-DE',{maximumFractionDigits:1}):'0';}
+function f2(n){return n?n.toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}):'0,00';}
+function pct(n){return n?(n*100).toFixed(1)+' %':'0,0 %';}
+function pf(id){const el=document.getElementById(id);return el?parseFloat(el.value)||0:0;}
+function showToast(msg,type){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+(type||'ok');setTimeout(()=>t.classList.remove('show'),2500);}
+
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+init();
+</script>
+</body>
+</html>
