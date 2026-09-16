@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#0a1628">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Solar Tracker">
-<title>Solar Tracker – Tondo / Fuchs</title>
+<title>Solar Tracker</title>
 <link rel="manifest" href="manifest.json">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -249,7 +249,7 @@ td input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:
   <div class="logo-icon">☀️</div>
   <div>
     <div class="logo-text">Solar Tracker</div>
-    <div class="logo-sub">Tondo / Fuchs · 11.4 kWp</div>
+    <div class="logo-sub" id="headerSub" onclick="editName()" style="cursor:pointer" title="Tippen zum Ändern"></div>
   </div>
 </header>
 
@@ -285,7 +285,7 @@ td input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:
       <div id="ssQueue" class="ss-queue"></div>
 
       <button class="import-btn" id="processBtn" onclick="processAllScreenshots()" style="display:none">
-        🤖 Alle auslesen & speichern
+        🤖 Alle auslesen &amp; speichern
       </button>
     </div>
 
@@ -308,7 +308,7 @@ td input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:
       <div class="fi"><div class="fi-left"><div class="fi-icon">🔽</div><div><div class="fi-label">Bezug</div><div class="fi-sub">Vom Netz gekauft kWh</div></div></div><input type="number" id="q_bezug" step="0.1" min="0" placeholder="0.0" inputmode="decimal"></div>
       <div class="fi"><div class="fi-left"><div class="fi-icon">📊</div><div><div class="fi-label">Verbrauch</div><div class="fi-sub">Gesamt kWh</div></div></div><input type="number" id="q_verbr" step="0.1" min="0" placeholder="0.0" inputmode="decimal"></div>
 
-      <button class="import-btn" onclick="manualImport()">✅ Übernehmen & Speichern</button>
+      <button class="import-btn" onclick="manualImport()">✅ Übernehmen &amp; Speichern</button>
 
       <div class="result-box" id="resultBox">
         <h4 id="resultTitle">✓ Gespeichert!</h4>
@@ -324,7 +324,7 @@ td input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:
     <div class="sec">⚙️ Jahreseinstellungen</div>
     <div class="card-grid">
       <div class="card">
-        <div class="card-h">Preise & Anlage</div>
+        <div class="card-h">Preise &amp; Anlage</div>
         <div class="sr"><span class="sl">Strompreis (€/kWh)</span><input type="number" class="inp" id="inp_sp" step="0.01" min="0" onchange="saveAndRecalc()"></div>
         <div class="sr"><span class="sl">Einspeiseverg.</span><input type="number" class="inp" id="inp_ev" step="0.001" min="0" onchange="saveAndRecalc()"></div>
         <div class="sr"><span class="sl">kWp</span><input type="number" class="inp" id="inp_kw" step="0.1" min="0" onchange="saveAndRecalc()"></div>
@@ -409,6 +409,20 @@ td input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:
   <!-- ══════════════ EINSTELLUNGEN TAB ══════════════ -->
   <div id="tab-einst" style="display:none">
     <div class="card">
+      <div class="card-h">🏷️ Meine Anlage</div>
+      <div class="field">
+        <label>Name der Anlage</label>
+        <input type="text" class="tinp" id="cfg_name" placeholder="z.B. Familie Mustermann">
+      </div>
+      <div class="sr"><span class="sl">Leistung (kWp)</span><input type="number" class="inp" id="cfg_kwp" step="0.1" min="0"></div>
+      <div class="sr"><span class="sl">Strompreis (€/kWh)</span><input type="number" class="inp" id="cfg_sp" step="0.01" min="0"></div>
+      <div class="sr"><span class="sl">Einspeiseverg. (€/kWh)</span><input type="number" class="inp" id="cfg_ev" step="0.001" min="0"></div>
+      <div class="sr"><span class="sl">Investition (€)</span><input type="number" class="inp" id="cfg_inv" step="100" min="0"></div>
+      <div class="sr"><span class="sl">davon Speicher (€)</span><input type="number" class="inp" id="cfg_si" step="100" min="0"></div>
+      <button class="btn btn-primary" style="margin-top:12px;width:100%" onclick="saveAnlageCfg()">💾 Übernehmen</button>
+      <p style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5;">Diese Werte werden für alle Jahre ohne Daten als Standard übernommen. Den Namen kannst du auch oben im Titel antippen und ändern.</p>
+    </div>
+    <div class="card" style="margin-top:12px;">
       <div class="card-h">🔗 FEMS Adresse</div>
       <div class="field">
         <label>IP-Adresse</label>
@@ -425,8 +439,13 @@ td input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:
       <button class="btn btn-primary" style="margin-top:10px;width:100%" onclick="setAllPrices()">✅ Alle Monate setzen</button>
     </div>
     <div class="card" style="margin-top:12px;">
+      <div class="card-h">📦 Beispieldaten</div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Lädt Beispieldaten (2023–2026) einer echten 11,4-kWp-Anlage — praktisch, um die App mit realistischen Werten auszuprobieren.</p>
+      <button class="btn btn-secondary" style="width:100%" onclick="loadDemoData()">📦 Beispieldaten laden</button>
+    </div>
+    <div class="card" style="margin-top:12px;">
       <div class="card-h">🗑️ Daten zurücksetzen</div>
-      <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Alle eingetragenen Werte löschen und mit den Original-Excel-Daten neu starten.</p>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Alle eingetragenen Werte löschen und mit einer leeren App neu starten.</p>
       <button class="btn" style="background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);color:var(--red);width:100%" onclick="resetData()">⚠️ Zurücksetzen</button>
     </div>
   </div>
@@ -445,7 +464,12 @@ const MO_FULL=['Januar','Februar','März','April','Mai','Juni','Juli','August','
 const YEARS=[2020,2021,2022,2023,2024,2025,2026,2027,2028,2029,2030,2031,2032,2033,2034,2035,2036,2037,2038,2039,2040,2041,2042,2043,2044,2045,2046,2047,2048,2049,2050,2051,2052,2053,2054,2055,2056,2057,2058,2059,2060,2061,2062,2063,2064,2065,2066,2067,2068,2069,2070,2071,2072,2073,2074,2075,2076,2077,2078,2079,2080,2081,2082,2083,2084,2085,2086,2087,2088,2089,2090,2091,2092,2093,2094,2095,2096,2097,2098,2099];
 
 // ═══════════════════════════════════════════════
-// PRE-FILLED DATA FROM EXCEL
+// ANLAGEN-KONFIG (Name + Standardwerte, pro Gerät)
+// ═══════════════════════════════════════════════
+let CFG={name:'',kwp:0,sp:.41,ev:.082,inv:0,si:0};
+
+// ═══════════════════════════════════════════════
+// BEISPIELDATEN (per Button in ⚙️ Einstellungen ladbar)
 // ═══════════════════════════════════════════════
 const PREFILLED={
   2023:{sp:.33,ev:.082,kwp:11.4,mp:[0,0,0,0,0,0,0,0,.33,.33,.33,.33],
@@ -467,10 +491,10 @@ const PREFILLED={
     V:{d:[126.2,153.1,460.7,0,0,0,0,0,0,0,0,0],e:[85.4,79.9,258.1,0,0,0,0,0,0,0,0,0],g:[592.9,523,178.8,0,0,0,0,0,0,0,0,0]},
     E:{d:[126.2,153.1,460.7,0,0,0,0,0,0,0,0,0],a:[96,89.3,272.6,0,0,0,0,0,0,0,0,0],i:[19,35.9,316.5,0,0,0,0,0,0,0,0,0]},
     vc:{'Skoda':[80.3,95.5,0,0,0,0,0,0,0,0,0,0],'Twingo':[90,92.4,0,0,0,0,0,0,0,0,0,0]},
-    inv:0,si:0}
+    inv:18146.89,si:7393.88}
 };
 
-function makeEmpty(){return{sp:.41,ev:.082,kwp:11.4,mp:Array(12).fill(.41),V:{d:Array(12).fill(0),e:Array(12).fill(0),g:Array(12).fill(0)},E:{d:Array(12).fill(0),a:Array(12).fill(0),i:Array(12).fill(0)},vc:{Skoda:Array(12).fill(0),Twingo:Array(12).fill(0)},inv:18146.89,si:7393.88};}
+function makeEmpty(){return{sp:CFG.sp||.41,ev:CFG.ev||.082,kwp:CFG.kwp||0,mp:Array(12).fill(CFG.sp||.41),V:{d:Array(12).fill(0),e:Array(12).fill(0),g:Array(12).fill(0)},E:{d:Array(12).fill(0),a:Array(12).fill(0),i:Array(12).fill(0)},vc:{},inv:CFG.inv||0,si:CFG.si||0};}
 
 // ═══════════════════════════════════════════════
 // STATE
@@ -482,10 +506,14 @@ let ssFiles=[], ssResults=[];
 // INIT
 // ═══════════════════════════════════════════════
 function init(){
+  // Load Anlagen-Konfig
+  const savedCfg=localStorage.getItem('anlageCfg');
+  if(savedCfg){try{CFG=Object.assign(CFG,JSON.parse(savedCfg));}catch(e){}}
+
   // Load data
   const saved=localStorage.getItem('solarData2');
   if(saved){try{D=JSON.parse(saved);}catch(e){D={};}}
-  YEARS.forEach(y=>{if(!D[y])D[y]=PREFILLED[y]?JSON.parse(JSON.stringify(PREFILLED[y])):makeEmpty();});
+  YEARS.forEach(y=>{if(!D[y])D[y]=makeEmpty();});
 
   // Load FEMS IP
   femsIp=localStorage.getItem('femsIp')||'';
@@ -495,9 +523,71 @@ function init(){
   }
 
   // Build UI
+  fillCfgInputs();
+  renderHeader();
   buildYearBar();
   buildSelects();
   selectYear(selYear);
+}
+
+// ═══════════════════════════════════════════════
+// ANLAGEN-KONFIG
+// ═══════════════════════════════════════════════
+function renderHeader(){
+  const el=document.getElementById('headerSub');
+  if(!el)return;
+  const kwp=(D[selYear]&&D[selYear].kwp)||CFG.kwp||0;
+  el.textContent=(CFG.name||'Meine PV-Anlage')+(kwp?` · ${kwp} kWp`:'');
+}
+
+function editName(){
+  const neu=prompt('Name der Anlage:',CFG.name||'');
+  if(neu===null)return;
+  CFG.name=neu.trim();
+  saveCfg();
+  fillCfgInputs();
+  renderHeader();
+  showToast('Name gespeichert!','ok');
+}
+
+function saveCfg(){localStorage.setItem('anlageCfg',JSON.stringify(CFG));}
+
+function fillCfgInputs(){
+  const m={cfg_name:CFG.name,cfg_kwp:CFG.kwp,cfg_sp:CFG.sp,cfg_ev:CFG.ev,cfg_inv:CFG.inv,cfg_si:CFG.si};
+  Object.keys(m).forEach(id=>{const el=document.getElementById(id);if(el)el.value=m[id]||'';});
+}
+
+function saveAnlageCfg(){
+  CFG.name=(document.getElementById('cfg_name').value||'').trim();
+  CFG.kwp=pf('cfg_kwp');
+  CFG.sp=pf('cfg_sp');
+  CFG.ev=pf('cfg_ev');
+  CFG.inv=pf('cfg_inv');
+  CFG.si=pf('cfg_si');
+  saveCfg();
+  // Standardwerte auf alle Jahre ohne Daten übernehmen
+  YEARS.forEach(y=>{
+    const d=D[y];if(!d)return;
+    const hasData=sum(d.V?.d||[])+sum(d.V?.e||[])+sum(d.V?.g||[])+sum(d.E?.i||[])>0;
+    if(!hasData){
+      d.sp=CFG.sp;d.ev=CFG.ev;d.kwp=CFG.kwp;d.inv=CFG.inv;d.si=CFG.si;
+      d.mp=Array(12).fill(CFG.sp);
+    }
+  });
+  localStorage.setItem('solarData2',JSON.stringify(D));
+  renderHeader();
+  renderDaten();
+  showToast('Anlagendaten gespeichert!','ok');
+}
+
+function loadDemoData(){
+  if(!confirm('Beispieldaten für 2023–2026 laden? Vorhandene Werte in diesen Jahren werden überschrieben.'))return;
+  Object.keys(PREFILLED).forEach(y=>{D[y]=JSON.parse(JSON.stringify(PREFILLED[y]));});
+  localStorage.setItem('solarData2',JSON.stringify(D));
+  buildYearBar();
+  renderDaten();
+  renderHeader();
+  showToast('Beispieldaten geladen!','ok');
 }
 
 // ═══════════════════════════════════════════════
@@ -522,6 +612,7 @@ function selectYear(y){
   document.querySelectorAll('.ybtn').forEach(b=>b.classList.toggle('active',parseInt(b.textContent)===selYear));
   const qs=document.getElementById('qYear');
   if(qs)qs.value=selYear;
+  renderHeader();
   renderDaten();
 }
 
@@ -638,7 +729,7 @@ function renderGesamt(){
   const allV=stats(D[selYear]);
   const gk=document.getElementById('gKpi');
   if(gk)gk.innerHTML=[
-    {l:'Kum. Erträge',v:'€'+f2(cumE),u:'seit 2023',c:'#fbbf24'},
+    {l:'Kum. Erträge',v:'€'+f2(cumE),u:'gesamt',c:'#fbbf24'},
     {l:'Akt. Autarkie',v:pct(allV.aut),u:selYear+'',c:'#22d3ee'},
     {l:'Akt. Erträge',v:'€'+f2(allV.erb),u:selYear+'',c:'#34d399'},
   ].map(k=>`<div class="kpi" style="--kc:${k.c}"><div class="kpi-l">${k.l}</div><div class="kpi-v">${k.v}</div><div class="kpi-u">${k.u}</div></div>`).join('');
@@ -730,13 +821,13 @@ function renderInvest(){
   // Investment base from selected year
   const base=d.inv||0;
 
-  // Sum all real earnings since 2023
+  // Sum all real earnings
   let cumE=0;
-  for(let y=2023;y<=2099;y++){if(D[y])cumE+=stats(D[y]).erb;}
+  for(let y=2020;y<=2099;y++){if(D[y])cumE+=stats(D[y]).erb;}
 
   // Average: use only complete years (months with data ≥ 10)
   let fullErb=0,fullCount=0;
-  for(let y=2023;y<=2099;y++){
+  for(let y=2020;y<=2099;y++){
     if(!D[y])continue;
     const months=D[y].V?.d?.filter(v=>v>0).length||0;
     if(months>=10){fullErb+=stats(D[y]).erb;fullCount++;}
@@ -748,7 +839,7 @@ function renderInvest(){
   } else {
     // Extrapolate: take best partial year, scale to 12 months
     let bestPartialErb=0,bestMonths=0;
-    for(let y=2023;y<=2099;y++){
+    for(let y=2020;y<=2099;y++){
       if(!D[y])continue;
       const months=D[y].V?.d?.filter(v=>v>0).length||0;
       const erb=stats(D[y]).erb;
@@ -779,7 +870,7 @@ function renderInvest(){
 
   document.getElementById('invStats').innerHTML=`
     <div class="sr"><span class="sl">Ø Jahresertrag</span><span class="sv pos">€${f2(avgErb)}</span></div>
-    <div class="sr"><span class="sl">Kum. Erträge seit 2023</span><span class="sv pos">€${f2(cumE)}</span></div>
+    <div class="sr"><span class="sl">Kum. Erträge</span><span class="sv pos">€${f2(cumE)}</span></div>
     <div class="sr"><span class="sl">Anteil abgezahlt</span><span class="sv" style="color:var(--accent)">${base>0?pct(cumE/base):'—'}</span></div>`;
   document.getElementById('offeneInvest').textContent='€'+f2(offen);
   document.getElementById('amortFill').style.width=(pd*100)+'%';
@@ -790,14 +881,15 @@ function renderInvest(){
 
   // Calculate average yearly earnings for projection
   let totalErb=0,countErb=0;
-  for(let y=2023;y<=2026;y++){if(D[y]){const yv=stats(D[y]);if(yv.erb>0){totalErb+=yv.erb;countErb++;}}}
+  for(let y=2020;y<=2099;y++){if(D[y]){const yv=stats(D[y]);if(yv.erb>0){totalErb+=yv.erb;countErb++;}}}
   const avgYearlyErb=countErb>0?totalErb/countErb:500;
 
   let cum2=0;const labels=[],inv=[],ertr=[];
+  let started=false;
   // Real data years
-  for(let y=2023;y<=2099;y++){
-    if(D[y]){const yv=stats(D[y]);if(yv.erb>0){cum2+=yv.erb;labels.push(y);inv.push(base.toFixed(0));ertr.push(Math.min(cum2,base).toFixed(0));if(cum2>=base)break;}}
-    else if(cum2<base&&labels.length>0){
+  for(let y=2020;y<=2099;y++){
+    if(D[y]){const yv=stats(D[y]);if(yv.erb>0){started=true;cum2+=yv.erb;labels.push(y);inv.push(base.toFixed(0));ertr.push(Math.min(cum2,base).toFixed(0));if(cum2>=base)break;continue;}}
+    if(started&&cum2<base&&labels.length>0){
       // Project future years with average
       cum2+=avgYearlyErb;
       labels.push(y);inv.push(base.toFixed(0));ertr.push(Math.min(cum2,base).toFixed(0));
@@ -1005,6 +1097,7 @@ function showTab(name,btn){
   if(name==='gesamt')renderGesamt();
   if(name==='vergleich')renderVergleich();
   if(name==='invest'){renderDaten();renderInvest();}
+  if(name==='einst')fillCfgInputs();
 }
 
 // ═══════════════════════════════════════════════
@@ -1020,6 +1113,7 @@ function saveAndRecalc(){
   const d=D[selYear];
   d.sp=pf('inp_sp');d.ev=pf('inp_ev');d.kwp=pf('inp_kw');d.inv=pf('inp_inv');d.si=pf('inp_si');
   renderKPIs(d,'kpiRow');
+  renderHeader();
 }
 
 function saveData(){
@@ -1040,8 +1134,8 @@ function setAllPrices(){
 function resetData(){
   if(!confirm('Wirklich alle Daten zurücksetzen?'))return;
   localStorage.removeItem('solarData2');
-  D={};YEARS.forEach(y=>{D[y]=PREFILLED[y]?JSON.parse(JSON.stringify(PREFILLED[y])):makeEmpty();});
-  buildYearBar();renderDaten();showToast('Zurückgesetzt!','ok');
+  D={};YEARS.forEach(y=>{D[y]=makeEmpty();});
+  buildYearBar();renderDaten();renderHeader();showToast('Zurückgesetzt!','ok');
 }
 
 // ═══════════════════════════════════════════════
